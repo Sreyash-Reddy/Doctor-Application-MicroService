@@ -1,6 +1,7 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.controller;
 
 import com.doctorappointmentapp.doctorapplicationmicroservice.entities.Doctor;
+import com.doctorappointmentapp.doctorapplicationmicroservice.exceptions.DoctorRegistrationException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.service.DoctorApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +15,7 @@ public class DoctorApplicationController {
     private DoctorApplicationService doctorApplicationService;
 
     @PostMapping("register/doctor")
-    public Doctor registerNewDoctorAccountIntoApplication(@RequestBody Doctor newDoctorInputInformation){
+    public Doctor registerNewDoctorAccountIntoApplication(@RequestBody Doctor newDoctorInputInformation) throws DoctorRegistrationException {
         return this.doctorApplicationService.registerNewDoctorAccountIntoApplication(newDoctorInputInformation);
     }
 
