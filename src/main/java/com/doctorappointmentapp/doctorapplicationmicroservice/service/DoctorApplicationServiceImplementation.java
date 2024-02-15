@@ -12,7 +12,7 @@ public class DoctorApplicationServiceImplementation implements DoctorApplication
     private DoctorRepository doctorRepository;
 
     @Override
-    public Doctor registerNewDoctorAccount(Doctor doctor) {
+    public Doctor registerNewDoctorAccountIntoApplication(Doctor doctor) {
         return this.doctorRepository.save(doctor);
     }
 }

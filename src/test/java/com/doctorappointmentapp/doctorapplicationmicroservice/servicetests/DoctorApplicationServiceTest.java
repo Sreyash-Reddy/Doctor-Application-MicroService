@@ -11,7 +11,4 @@ public class DoctorApplicationServiceTest {
 
     @Autowired
     private DoctorApplicationService doctorApplicationService;
-
-    @Test
-    void when_registerNewDoctorAccount_is_called_with_valid_name_and_availability_
 }
