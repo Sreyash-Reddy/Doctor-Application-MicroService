@@ -25,12 +25,6 @@ public class Doctor {
     private Integer experience;
 
 
-    private Boolean isAvailable;
+    private Boolean isAvailable = true;
 
-    public Doctor(String name, String specialization, Integer experience) {
-        this.name = name;
-        this.specialization = specialization;
-        this.experience = experience;
-        this.isAvailable = true;
-    }
 }
