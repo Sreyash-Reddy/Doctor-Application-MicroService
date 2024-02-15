@@ -49,4 +49,10 @@ public class DoctorApplicationServiceTest {
         Doctor doctor = Doctor.builder().name("Qwerty").specialization("Cardiologist").experience(-2).build();
         Assertions.assertThrows(DoctorRegistrationException.class,()->this.doctorApplicationService.registerNewDoctorAccountIntoApplication(doctor));
     }
+
+    @Test
+    void when_registerNewDoctorAccountIntoApplication_is_called_with_null_Doctor_object_throw_DoctorRegistrationException(){
+        Doctor doctor = null;
+        Assertions.assertThrows(DoctorRegistrationException.class,()->this.doctorApplicationService.registerNewDoctorAccountIntoApplication(doctor));
+    }
 }

@@ -19,12 +19,11 @@ public class Doctor {
     //Basic Details
     @GeneratedValue
     @Id
-    private Long id;
+    private Integer id;
     private String name;
     private String specialization;
     private Integer experience;
 
 
     private Boolean isAvailable = true;
-
 }

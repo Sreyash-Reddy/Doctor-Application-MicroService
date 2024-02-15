@@ -14,6 +14,7 @@ public class DoctorApplicationServiceImplementation implements DoctorApplication
 
     @Override
     public Doctor registerNewDoctorAccountIntoApplication(Doctor doctor) throws DoctorRegistrationException {
+        if (doctor == null) throw new DoctorRegistrationException("Null Data Received, Please verify and Register Again");
         if (doctor.getName() == null) throw new DoctorRegistrationException("Doctor's Name Field Cannot Be Null, Please verify and Register Again");
         if (doctor.getSpecialization() == null) throw new DoctorRegistrationException("Doctor's Specialization Field Cannot Be Null, Please verify and Register Again");
         if (doctor.getExperience() == null) throw new DoctorRegistrationException("Doctor's Experience Field Cannot Be Null, Please verify and Register Again");
