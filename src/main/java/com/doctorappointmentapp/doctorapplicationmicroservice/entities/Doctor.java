@@ -24,6 +24,10 @@ public class Doctor {
     private String specialization;
     private Integer experience;
 
+    //Authorization
+    private String email;
+    private String password;
+
 
     private Boolean isAvailable = true;
 }
