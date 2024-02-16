@@ -16,10 +16,11 @@ public class DoctorServiceTest {
     private DoctorService doctorService;
 
 
+
     //Test Cases For Doctor Registration Functionality
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_notNull_name_notNull_specialization_notNull_positive_Experience_return_abject(){
-        Doctor doctor = Doctor.builder().name("Qwerty").specialization("Cardiologist").experience(2).email("admin1@gmail.com").password("123").build();
+        Doctor doctor = Doctor.builder().name("Qwerty").specialization("Cardiologist").experience(2).email("admin6@gmail.com").password("123").build();
         try {
             Assertions.assertNotNull(this.doctorService.registerNewDoctorAccountIntoApplication(doctor));
         } catch (DoctorRegistrationException e) {
@@ -65,7 +66,7 @@ public class DoctorServiceTest {
 
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_notNull_existing_email_notNull_password_throw_DoctorRegistrationException(){
-        Doctor doctor = Doctor.builder().name("Qwerty").specialization("Cardiologist").experience(2).email("admin1@gmail.com").password("123").build();
+        Doctor doctor = Doctor.builder().name("Qwerty").specialization("Cardiologist").experience(2).email("admin6@gmail.com").password("123").build();
         Assertions.assertThrows(DoctorRegistrationException.class,()->this.doctorService.registerNewDoctorAccountIntoApplication(doctor));
     }
 
@@ -82,7 +83,7 @@ public class DoctorServiceTest {
     @Test
     void when_loginNewDoctorAccountIntoApplication_is_called_with_notNull_email_notNull_password_return_doctor_object() {
         try {
-            Assertions.assertNotNull(this.doctorService.loginDoctorAccountIntoApplication("qwerty@gmail.com", "string"));
+            Assertions.assertNotNull(this.doctorService.loginDoctorAccountIntoApplication("admin6@gmail.com", "123"));
         } catch (DoctorLoginException e) {
             throw new RuntimeException(e);
         }

@@ -33,7 +33,8 @@ public class DoctorServiceImpl implements DoctorService{
         if (password == null) throw new DoctorLoginException("Password field cannot be null! Please retry login!");
         List<Doctor> doctorDetails = this.doctorRepository.findByEmail(email);
         if (doctorDetails.isEmpty()) throw new DoctorLoginException("Email account does not exist! Please register!");
-        if (doctorDetails.get(0).getPassword() != password) throw new DoctorLoginException("Incorrect password! Please retry login!");
+//        System.out.println(doctorDetails.get(0).getPassword()+password);
+        if (!doctorDetails.get(0).getPassword().equals(password)) throw new DoctorLoginException("Incorrect password! Please retry login! Actual:"+doctorDetails.get(0).getPassword()+"Given: "+password);
 
         return doctorDetails.get(0);
     }
