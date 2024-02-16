@@ -11,4 +11,6 @@ import java.util.List;
 public interface DoctorRepository extends JpaRepository<Doctor,Long> {
 
     List<Doctor> findByEmail(String email);
+
+    Doctor findByEmailAndPassword(String email, String password);
 }

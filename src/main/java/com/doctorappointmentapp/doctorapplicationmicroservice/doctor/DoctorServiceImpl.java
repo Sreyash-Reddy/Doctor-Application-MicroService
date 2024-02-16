@@ -1,7 +1,12 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.doctor;
 
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorLoginException;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorRegistrationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class DoctorServiceImpl implements DoctorService{
@@ -21,4 +26,17 @@ public class DoctorServiceImpl implements DoctorService{
 
         return this.doctorRepository.save(doctor);
     }
+
+    @Override
+    public Doctor loginDoctorAccountIntoApplication(String email, String password) throws DoctorLoginException {
+        if (email == null) throw new DoctorLoginException("Email field cannot be null! Please retry login!");
+        if (password == null) throw new DoctorLoginException("Password field cannot be null! Please retry login!");
+        List<Doctor> doctorDetails = this.doctorRepository.findByEmail(email);
+        if (doctorDetails.isEmpty()) throw new DoctorLoginException("Email account does not exist! Please register!");
+        if (doctorDetails.get(0).getPassword() != password) throw new DoctorLoginException("Incorrect password! Please retry login!");
+
+        return doctorDetails.get(0);
+    }
+
+
 }

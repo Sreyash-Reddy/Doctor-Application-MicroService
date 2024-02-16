@@ -1,7 +1,8 @@
-package com.doctorappointmentapp.doctorapplicationmicroservice.servicetests;
+package com.doctorappointmentapp.doctorapplicationmicroservice.doctortest;
 
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
-import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.DoctorRegistrationException;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorLoginException;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorRegistrationException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.DoctorService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,4 +78,34 @@ public class DoctorServiceTest {
 
 
 
+    //doctorLogin
+    @Test
+    void when_loginNewDoctorAccountIntoApplication_is_called_with_notNull_email_notNull_password_return_doctor_object() {
+        try {
+            Assertions.assertNotNull(this.doctorService.loginDoctorAccountIntoApplication("qwerty@gmail.com", "string"));
+        } catch (DoctorLoginException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void when_loginNewDoctorAccountIntoApplication_is_called_with_Null_email_notNull_password_throw_DoctorLoginException() {
+        Assertions.assertThrows(DoctorLoginException.class, ()->this.doctorService.loginDoctorAccountIntoApplication(null, "string"));
+    }
+
+
+    @Test
+    void when_loginNewDoctorAccountIntoApplication_is_called_with_notNull_email_Null_password_throw_DoctorLoginException() {
+        Assertions.assertThrows(DoctorLoginException.class, ()->this.doctorService.loginDoctorAccountIntoApplication("qwerty@gmail.com", null));
+    }
+
+    @Test
+    void when_loginNewDoctorAccountIntoApplication_is_called_with_notNull_nonExisting_email_notNull_password_throw_DoctorLoginException() {
+        Assertions.assertThrows(DoctorLoginException.class, ()->this.doctorService.loginDoctorAccountIntoApplication("abc@gmail.com", "string"));
+    }
+
+    @Test
+    void when_loginNewDoctorAccountIntoApplication_is_called_with_notNull_Existing_email_notNull_incorrect_password_throw_DoctorLoginException() {
+        Assertions.assertThrows(DoctorLoginException.class, ()->this.doctorService.loginDoctorAccountIntoApplication("qwerty@gmail.com", "password"));
+    }
 }

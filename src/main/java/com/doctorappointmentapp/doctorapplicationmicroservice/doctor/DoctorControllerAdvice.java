@@ -1,5 +1,6 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.doctor;
 
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorRegistrationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
