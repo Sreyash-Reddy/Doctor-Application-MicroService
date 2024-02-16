@@ -1,33 +1,22 @@
-package com.doctorappointmentapp.doctorapplicationmicroservice.entities;
+package com.doctorappointmentapp.doctorapplicationmicroservice.doctor.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Doctor {
-
-    //Basic Details
-    @GeneratedValue
-    @Id
-    private Integer id;
+public class DoctorRegistrationDTO {
     private String name;
     private String specialization;
     private Integer experience;
+    private String mobileNumber;
+    private Double consultancyFee;
 
     //Authorization
     private String email;
     private String password;
-
-
-    private Boolean isAvailable = true;
 }

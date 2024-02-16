@@ -1,4 +1,4 @@
-package com.doctorappointmentapp.doctorapplicationmicroservice.exceptions;
+package com.doctorappointmentapp.doctorapplicationmicroservice.doctor;
 
 public class DoctorRegistrationException extends Exception{
     public DoctorRegistrationException(String message) {

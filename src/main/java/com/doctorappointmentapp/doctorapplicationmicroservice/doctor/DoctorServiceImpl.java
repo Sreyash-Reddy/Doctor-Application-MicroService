@@ -1,17 +1,13 @@
-package com.doctorappointmentapp.doctorapplicationmicroservice.service;
+package com.doctorappointmentapp.doctorapplicationmicroservice.doctor;
 
-import com.doctorappointmentapp.doctorapplicationmicroservice.dataaccesslogic.DoctorRepository;
-import com.doctorappointmentapp.doctorapplicationmicroservice.entities.Doctor;
-import com.doctorappointmentapp.doctorapplicationmicroservice.exceptions.DoctorRegistrationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DoctorApplicationServiceImplementation implements DoctorApplicationService{
+public class DoctorServiceImpl implements DoctorService{
 
     @Autowired
     private DoctorRepository doctorRepository;
-
     @Override
     public Doctor registerNewDoctorAccountIntoApplication(Doctor doctor) throws DoctorRegistrationException {
         if (doctor == null) throw new DoctorRegistrationException("Null Data Received, Please verify and Register Again");

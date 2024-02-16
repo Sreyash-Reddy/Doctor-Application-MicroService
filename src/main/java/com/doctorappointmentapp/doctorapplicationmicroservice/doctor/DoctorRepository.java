@@ -1,11 +1,10 @@
-package com.doctorappointmentapp.doctorapplicationmicroservice.dataaccesslogic;
+package com.doctorappointmentapp.doctorapplicationmicroservice.doctor;
 
-import com.doctorappointmentapp.doctorapplicationmicroservice.entities.Doctor;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Repository
