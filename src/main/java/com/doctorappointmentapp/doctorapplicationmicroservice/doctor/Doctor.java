@@ -5,13 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Data
@@ -31,6 +29,8 @@ public class Doctor {
     private String mobileNumber;
     private Double consultancyFee;
 
+    private Boolean isActive=true;
+
     //Authorization
     private String email;
     private String password;
@@ -40,4 +40,16 @@ public class Doctor {
 
     @OneToMany//Remove it if we find a good solution
     private List<Appointment> previousAppointmentList = new ArrayList<>();
+
+//    public Doctor(Integer id, String name, String specialization, Integer experience, String mobileNumber, Double consultancyFee, String email, String password) {
+//        this.id = id;
+//        this.name = name;
+//        this.specialization = specialization;
+//        this.experience = experience;
+//        this.mobileNumber = mobileNumber;
+//        this.consultancyFee = consultancyFee;
+//        this.isActive=true;
+//        this.email = email;
+//        this.password = password;
+//    }
 }
