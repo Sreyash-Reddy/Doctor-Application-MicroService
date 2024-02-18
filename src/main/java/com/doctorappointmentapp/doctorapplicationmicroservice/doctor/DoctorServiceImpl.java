@@ -87,12 +87,17 @@ public class DoctorServiceImpl implements DoctorService{
         if(!doctorToBeDeleted.getPassword().equals(password)) throw new DoctorDeletionException("Incorrect Password, Please Try Again");
 
         //Should SET isActive to FALSE
-        doctorToBeDeleted.setIsActive(true);
+        doctorToBeDeleted.setIsActive(false);
 
         this.doctorRepository.save(doctorToBeDeleted);
         return doctorToBeDeleted;
 
 
+    }
+
+    @Override
+    public void deleteAllDoctors() {
+        this.doctorRepository.deleteAll();
     }
 
 
