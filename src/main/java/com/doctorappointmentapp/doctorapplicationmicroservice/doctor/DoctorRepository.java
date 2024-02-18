@@ -15,4 +15,5 @@ public interface DoctorRepository extends JpaRepository<Doctor,Integer> {
 
     @Override
     void deleteAll();
+
 }

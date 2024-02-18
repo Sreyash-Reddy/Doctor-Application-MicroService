@@ -1,9 +1,10 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.client;
 
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientDeletionException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientLoginException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientRegistrationException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientUpdationException;
+import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.Appointment;
+import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientBookAppointmentDTO;
+import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.*;
+
+import java.time.LocalDate;
 
 public interface ClientService {
     Client registerNewClientAccountIntoApplication(Client client) throws ClientRegistrationException;
@@ -17,4 +18,5 @@ public interface ClientService {
     void deleteAllClients();
 
 
+    Appointment bookAppointmentInClientApplication(Appointment appointment , LocalDate bookingDate) throws ClientAppointmentBookingException;
 }
