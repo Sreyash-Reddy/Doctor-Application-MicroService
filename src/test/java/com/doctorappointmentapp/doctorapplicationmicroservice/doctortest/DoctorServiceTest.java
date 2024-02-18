@@ -20,6 +20,8 @@ public class DoctorServiceTest {
 
 
     //Test Cases For Doctor Registration Functionality
+
+    @Order(1)
     @DisplayName("Register Doctor Using Proper Object")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_notNull_name_notNull_specialization_notNull_positive_Experience_return_abject(){
@@ -30,12 +32,14 @@ public class DoctorServiceTest {
         }
     }
 
+    @Order(2)
     @DisplayName("Register Doctor Using Null")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_null_Doctor_object_throw_DoctorRegistrationException(){
         Assertions.assertThrows(DoctorRegistrationException.class,()->this.doctorService.registerNewDoctorAccountIntoApplication(null));
     }
 
+    @Order(3)
     @DisplayName("Register Doctor Using Null Name")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_Null_name_notNull_specialization_notNull_positive_Experience_throw_DoctorRegistrationException(){
@@ -44,6 +48,7 @@ public class DoctorServiceTest {
         Assertions.assertThrows(DoctorRegistrationException.class,()->this.doctorService.registerNewDoctorAccountIntoApplication(doctor));
     }
 
+    @Order(4)
     @DisplayName("Register Doctor Using Null Specialization")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_notNull_name_Null_specialization_notNull_positive_Experience_throw_DoctorRegistrationException(){
@@ -51,6 +56,7 @@ public class DoctorServiceTest {
         Assertions.assertThrows(DoctorRegistrationException.class,()->this.doctorService.registerNewDoctorAccountIntoApplication(doctor));
     }
 
+    @Order(5)
     @DisplayName("Register Doctor Using Null Experience")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_notNull_name_notNull_specialization_Null_Experience_throw_DoctorRegistrationException(){
@@ -58,6 +64,7 @@ public class DoctorServiceTest {
         Assertions.assertThrows(DoctorRegistrationException.class,()->this.doctorService.registerNewDoctorAccountIntoApplication(doctor));
     }
 
+    @Order(6)
     @DisplayName("Register Doctor Using Negative Experience")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_notNull_name_notNull_specialization_notNull_negative_Experience_throw_DoctorRegistrationException(){
@@ -65,20 +72,21 @@ public class DoctorServiceTest {
         Assertions.assertThrows(DoctorRegistrationException.class,()->this.doctorService.registerNewDoctorAccountIntoApplication(doctor));
     }
 
+    @Order(7)
     @DisplayName("Register Doctor Using Null Email")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_Null_email_notNull_password_throw_DoctorRegistrationException(){
         Doctor doctor = Doctor.builder().name("Qwerty").specialization("Cardiologist").experience(2).email(null).password("123").build();
         Assertions.assertThrows(DoctorRegistrationException.class,()->this.doctorService.registerNewDoctorAccountIntoApplication(doctor));
     }
-
+    @Order(8)
     @DisplayName("Register Doctor Using Existing Email")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_notNull_existing_email_notNull_password_throw_DoctorRegistrationException(){
         Assertions.assertThrows(DoctorRegistrationException.class,()->this.doctorService.registerNewDoctorAccountIntoApplication(testDoctor));
     }
 
-
+    @Order(9)
     @DisplayName("Register Doctor Using Null Password")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_notNull_email_Null_password_throw_DoctorRegistrationException(){
@@ -87,9 +95,8 @@ public class DoctorServiceTest {
     }
 
 
-
-
     //doctorLogin
+    @Order(10)
     @DisplayName("Doctor Login Using Correct Email And Password")
     @Test
     void when_loginNewDoctorAccountIntoApplication_is_called_with_notNull_email_notNull_password_return_doctor_object() {
@@ -100,24 +107,28 @@ public class DoctorServiceTest {
         }
     }
 
+    @Order(11)
     @DisplayName("Doctor Login Using Null Email")
     @Test
     void when_loginNewDoctorAccountIntoApplication_is_called_with_Null_email_notNull_password_throw_DoctorLoginException() {
         Assertions.assertThrows(DoctorLoginException.class, ()->this.doctorService.loginDoctorAccountIntoApplication(null, "string"));
     }
 
+    @Order(12)
     @DisplayName("Doctor Login Using Null Password")
     @Test
     void when_loginNewDoctorAccountIntoApplication_is_called_with_notNull_email_Null_password_throw_DoctorLoginException() {
         Assertions.assertThrows(DoctorLoginException.class, ()->this.doctorService.loginDoctorAccountIntoApplication("qwerty@gmail.com", null));
     }
 
+    @Order(13)
     @DisplayName("Doctor Login Using Non-Existing Email")
     @Test
     void when_loginNewDoctorAccountIntoApplication_is_called_with_notNull_nonExisting_email_notNull_password_throw_DoctorLoginException() {
         Assertions.assertThrows(DoctorLoginException.class, ()->this.doctorService.loginDoctorAccountIntoApplication("abc@gmail.com", "string"));
     }
 
+    @Order(14)
     @DisplayName("Doctor Login Using Incorrect Password")
     @Test
     void when_loginNewDoctorAccountIntoApplication_is_called_with_notNull_Existing_email_notNull_incorrect_password_throw_DoctorLoginException() {
@@ -126,6 +137,7 @@ public class DoctorServiceTest {
 
 
     //Tests for updating doctor details functionality
+    @Order(15)
     @DisplayName("Updating Doctor Giving All Details")
     @Test
     void when_updateDoctorAccountIntoApplication_is_called_with_notNull_name_notNull_specialization_notNull_positive_Experience_return_object(){
@@ -138,6 +150,7 @@ public class DoctorServiceTest {
         }
     }
 
+    @Order(16)
     @DisplayName("Updating Doctor Using Non-Existing Email")
     @Test
     void when_updateDoctorAccountIntoApplication_is_called_with_notNull_nonExisting_email_throw_DoctorUpdationException(){
@@ -145,12 +158,14 @@ public class DoctorServiceTest {
         Assertions.assertThrows(DoctorUpdationException.class,()->this.doctorService.updateDoctorAccountIntoApplication(updatedDoctor));
     }
 
+    @Order(17)
     @DisplayName("Updating Doctor Using Null Object")
     @Test
     void when_updateDoctorAccountIntoApplication_is_called_with_null_doctor_object_throw_DoctorUpdationException(){
        Assertions.assertThrows(DoctorUpdationException.class,()->this.doctorService.updateDoctorAccountIntoApplication(null));
     }
 
+    @Order(18)
     @DisplayName("Updating Doctor Using Null Name")
     @Test
     void when_updateDoctorAccountIntoApplication_is_called_with_Null_name_notNull_specialization_notNull_positive_Experience_throw_DoctorUpdationException(){
@@ -158,6 +173,7 @@ public class DoctorServiceTest {
         Assertions.assertThrows(DoctorUpdationException.class,()->this.doctorService.updateDoctorAccountIntoApplication(updatedDoctor));
     }
 
+    @Order(19)
     @DisplayName("Updating Doctor Using Null Specialization")
     @Test
     void when_updateDoctorAccountIntoApplication_is_called_with_notNull_name_Null_specialization_notNull_positive_Experience_throw_DoctorUpdationException(){
@@ -165,6 +181,7 @@ public class DoctorServiceTest {
         Assertions.assertThrows(DoctorUpdationException.class,()->this.doctorService.updateDoctorAccountIntoApplication(updatedDoctor));
     }
 
+    @Order(20)
     @DisplayName("Updating Doctor Using Null Experience")
     @Test
     void when_updateDoctorAccountIntoApplication_is_called_with_notNull_name_notNull_specialization_Null_positive_Experience_throw_DoctorUpdateException(){
@@ -172,6 +189,7 @@ public class DoctorServiceTest {
         Assertions.assertThrows(DoctorUpdationException.class,()->this.doctorService.updateDoctorAccountIntoApplication(updatedDoctor));
     }
 
+    @Order(21)
     @DisplayName("Updating Doctor Using Negative Experience")
     @Test
     void when_updateDoctorAccountIntoApplication_is_called_with_notNull_name_notNull_specialization_notNull_negative_Experience_throw_DoctorUpdateException(){
@@ -179,27 +197,38 @@ public class DoctorServiceTest {
         Assertions.assertThrows(DoctorUpdationException.class,()->this.doctorService.updateDoctorAccountIntoApplication(updatedDoctor));
     }
 
-    //Testcases for delete doctor functionality
+//    Testcases for delete doctor functionality
+    @Order(22)
     @DisplayName("Deleting Object Using Existing Email")
     @Test
-    void when_deleteDoctorAccountFromApplication_is_called_with_notNull_email_return_deleted_object(){
+    void when_deleteDoctorAccountFromApplication_is_called_with_notNull_email_notNull_password_return_deleted_object(){
         try {
-            Assertions.assertNotNull(this.doctorService.deleteDoctorAccountFromApplication(testDoctor.getEmail()));
-        } catch (DoctorDeletionException e) {
+            Doctor deletedDoctor=this.doctorService.deleteDoctorAccountFromApplication(testDoctor.getEmail(), testDoctor.getPassword());
+            Assertions.assertNotNull(deletedDoctor);
+        } catch (DoctorDeletionException  e) {
             throw new RuntimeException(e);
         }
     }
 
+    @Order(23)
     @DisplayName("Deleting Object Using Null Email")
     @Test
-    void when_deleteDoctorAccountFromApplication_is_called_with_null_email_return_DoctorDeletionException(){
-       Assertions.assertThrows(DoctorDeletionException.class,()->this.doctorService.deleteDoctorAccountFromApplication(null));
+    void when_deleteDoctorAccountFromApplication_is_called_with_null_email_notNull_password_return_DoctorDeletionException(){
+       Assertions.assertThrows(DoctorDeletionException.class,()->this.doctorService.deleteDoctorAccountFromApplication(null, testDoctor.getPassword()));
     }
 
+    @Order(24)
+    @DisplayName("Deleting Object Using Null Password")
+    @Test
+    void when_deleteDoctorAccountFromApplication_is_called_with_notNull_email_null_password_return_DoctorDeletionException(){
+        Assertions.assertThrows(DoctorDeletionException.class,()->this.doctorService.deleteDoctorAccountFromApplication(testDoctor.getEmail(), null));
+    }
+
+    @Order(25)
     @DisplayName("Deleting Object Using Non-Existing Email")
     @Test
-    void when_deleteDoctorAccountFromApplication_is_called_with_notNull_nonExisting_email_return_DoctorDeletionException(){
-        Assertions.assertThrows(DoctorDeletionException.class,()->this.doctorService.deleteDoctorAccountFromApplication("nonExisting@gmail.com"));
+    void when_deleteDoctorAccountFromApplication_is_called_with_notNull_nonExisting_email_notNull_password_return_DoctorDeletionException(){
+        Assertions.assertThrows(DoctorDeletionException.class,()->this.doctorService.deleteDoctorAccountFromApplication("nonExisting@gmail.com", testDoctor.getPassword()));
     }
 
 }

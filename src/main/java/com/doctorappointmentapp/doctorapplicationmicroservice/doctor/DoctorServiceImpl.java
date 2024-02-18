@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -30,7 +31,9 @@ public class DoctorServiceImpl implements DoctorService{
             else throw new DoctorRegistrationException("Account With Given Email Has Been Deactivated, Please Contact The Admin");
         }
         if (doctor.getPassword() == null) throw new DoctorRegistrationException("Doctor's Password Field Cannot Be Null, Please verify and Register Again");
-
+//        doctor.setIsActive(true);
+//        doctor.setPreviousAppointmentList(new ArrayList<>());
+//        doctor.setUpcomingAppointmentList(new ArrayList<>());
         return this.doctorRepository.save(doctor);
     }
 
@@ -42,6 +45,7 @@ public class DoctorServiceImpl implements DoctorService{
         if (doctorDetails.isEmpty()) throw new DoctorLoginException("Email account does not exist! Please register!");
 
         Doctor foundDoctor=doctorDetails.get();
+        System.out.println(foundDoctor.getIsActive());
         if(!foundDoctor.getIsActive())throw new DoctorLoginException("Account With Given Email Has Been Deactivated, Please Contact The Admin");
         else if (!doctorDetails.get().getPassword().equals(password)) throw new DoctorLoginException("Incorrect password! Please retry login!");
 
@@ -74,16 +78,20 @@ public class DoctorServiceImpl implements DoctorService{
     }
 
     @Override
-    public Doctor deleteDoctorAccountFromApplication(String email) throws DoctorDeletionException {
+    public Doctor deleteDoctorAccountFromApplication(String email, String password) throws DoctorDeletionException {
         if (email == null) throw new DoctorDeletionException("Doctor's Email Field Cannot Be Null, Please verify and Try Again");
+        if(password==null) throw new DoctorDeletionException("Doctor's Password Field Cannot Be Null, Please verify and Try Again");
         Optional<Doctor> doctorOptional=this.doctorRepository.findByEmail(email);
         if(doctorOptional.isEmpty()) throw new DoctorDeletionException("Account With Given Email Does Not Exist, Please verify and Try Again");
-        else{
-            Doctor doctorToBeDeleted=doctorOptional.get();
-            doctorToBeDeleted.setIsActive(false);
-            this.doctorRepository.save(doctorToBeDeleted);
-            return doctorToBeDeleted;
-        }
+        Doctor doctorToBeDeleted=doctorOptional.get();
+        if(!doctorToBeDeleted.getPassword().equals(password)) throw new DoctorDeletionException("Incorrect Password, Please Try Again");
+
+        //Should SET isActive to FALSE
+        doctorToBeDeleted.setIsActive(true);
+
+        this.doctorRepository.save(doctorToBeDeleted);
+        return doctorToBeDeleted;
+
 
     }
 

@@ -24,7 +24,6 @@ public class DoctorController {
                 .consultancyFee(newDoctorInputInformation.getConsultancyFee())
                 .email(newDoctorInputInformation.getEmail())
                 .password(newDoctorInputInformation.getPassword())
-                .isActive(true)
                 .build());
     }
 
@@ -42,13 +41,12 @@ public class DoctorController {
                 .consultancyFee(doctorUpdatedDoctorInformation.getConsultancyFee())
                 .email(doctorUpdatedDoctorInformation.getEmail())
                 .password(doctorUpdatedDoctorInformation.getPassword())
-
                 .build());
     }
 
     @DeleteMapping("delete/doctor")
     public Doctor deleteDoctorAccountFromApplication(@RequestBody DoctorDeleteDto doctorDeleteDto) throws DoctorDeletionException {
-        return this.doctorService.deleteDoctorAccountFromApplication(doctorDeleteDto.getEmail());
+        return this.doctorService.deleteDoctorAccountFromApplication(doctorDeleteDto.getEmail(),doctorDeleteDto.getPassword());
     }
 
 

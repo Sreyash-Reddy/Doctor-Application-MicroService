@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @Data
 @Entity
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Doctor {
@@ -29,27 +29,25 @@ public class Doctor {
     private String mobileNumber;
     private Double consultancyFee;
 
+    @Builder.Default
     private Boolean isActive=true;
 
     //Authorization
     private String email;
     private String password;
 
+    @Builder.Default
     @OneToMany
-    private List<Appointment> upcomingAppointmentList = new ArrayList<>();
+    private List<Appointment> upcomingAppointmentList=new ArrayList<>() ;
 
+    @Builder.Default
     @OneToMany//Remove it if we find a good solution
-    private List<Appointment> previousAppointmentList = new ArrayList<>();
+    private List<Appointment> previousAppointmentList=new ArrayList<>();
 
-//    public Doctor(Integer id, String name, String specialization, Integer experience, String mobileNumber, Double consultancyFee, String email, String password) {
-//        this.id = id;
-//        this.name = name;
-//        this.specialization = specialization;
-//        this.experience = experience;
-//        this.mobileNumber = mobileNumber;
-//        this.consultancyFee = consultancyFee;
-//        this.isActive=true;
-//        this.email = email;
-//        this.password = password;
-//    }
+    public Doctor() {
+        this.isActive = true;
+        this.upcomingAppointmentList = new ArrayList<>();
+        this.previousAppointmentList = new ArrayList<>();
+    }
+
 }
