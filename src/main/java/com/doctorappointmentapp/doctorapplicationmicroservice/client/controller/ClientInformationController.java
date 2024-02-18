@@ -1,5 +1,7 @@
-package com.doctorappointmentapp.doctorapplicationmicroservice.client;
+package com.doctorappointmentapp.doctorapplicationmicroservice.client.controller;
 
+import com.doctorappointmentapp.doctorapplicationmicroservice.client.Client;
+import com.doctorappointmentapp.doctorapplicationmicroservice.client.ClientService;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientLoginDTO;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientRegistrationDTO;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientDeletionException;
@@ -10,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class ClientController {
+public class ClientInformationController {
     @Autowired
     private ClientService clientService;
 
@@ -43,4 +45,5 @@ public class ClientController {
     public Client deleteClientAccountFromApplication(@RequestBody ClientLoginDTO clientVerificationInformation) throws ClientDeletionException{
         return this.clientService.deleteClientAccountFromApplication(clientVerificationInformation.getEmail(),clientVerificationInformation.getPassword());
     }
+
 }

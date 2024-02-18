@@ -1,38 +1,35 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.appointment;
 
-import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.Client;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Appointment {
+
     @GeneratedValue
     @Id
-    private Integer appointmentID;
+    private Integer id;
     private String appointmentDescription;
+
     private Boolean paymentStatus;
+    private Boolean doctorConfirmationStatus;
 
-    @ManyToOne
-    @JsonIgnore
-    private Doctor doctor;
+    private LocalDate appointmentDate;
+    private Integer appointmentSlot;
 
-    @JsonIgnore
-    @ManyToOne
-    private Client user;
-
-
-
+    private Integer clientID;
+    private Integer doctorID;
 }
 
 //Client
 
-//com.company.mobileapp.customer.Custom
+//com.company.mobile app.customer.Custom

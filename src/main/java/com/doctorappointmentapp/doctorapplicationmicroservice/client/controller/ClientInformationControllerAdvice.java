@@ -1,4 +1,4 @@
-package com.doctorappointmentapp.doctorapplicationmicroservice.client;
+package com.doctorappointmentapp.doctorapplicationmicroservice.client.controller;
 
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientDeletionException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientLoginException;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class ClientControllerAdvice {
+public class ClientInformationControllerAdvice {
 
     @ExceptionHandler(value={ClientRegistrationException.class})
     public ResponseEntity<String> clientRegistrationExceptionHandler(ClientRegistrationException clientRegistrationException){

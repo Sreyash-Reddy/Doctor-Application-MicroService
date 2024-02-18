@@ -1,17 +1,15 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.client;
 
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientDeletionException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientLoginException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientRegistrationException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientUpdationException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
-import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorDeletionException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorUpdationException;
+import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.Appointment;
+import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.AppointmentRepository;
+import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.*;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.Optional;
 
 @Service
@@ -19,6 +17,16 @@ public class ClientServiceImpl implements ClientService{
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private DoctorRepository doctorRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
+//    @Value("$numberOfSlots")
+//    private String numberOfSlots;
+
     @Override
     public Client registerNewClientAccountIntoApplication(Client client) throws ClientRegistrationException {
         if (client == null) throw new ClientRegistrationException("Null Data Received, Please verify and Register Again");
@@ -37,9 +45,6 @@ public class ClientServiceImpl implements ClientService{
             else throw new ClientRegistrationException("Account With Given Email Has Been Deactivated, Please Contact The Admin");
         }
         if (client.getPassword() == null) throw new ClientRegistrationException("Client's Password Field Cannot Be Null, Please verify and Register Again");
-//        client.setIsActive(true);
-//        client.setPreviousAppointmentList(new ArrayList<>());
-//        client.setUpcomingAppointmentList(new ArrayList<>());
         return this.clientRepository.save(client);
     }
 
@@ -100,5 +105,30 @@ public class ClientServiceImpl implements ClientService{
     @Override
     public void deleteAllClients() {
         this.clientRepository.deleteAll();
+    }
+
+    @Override
+    public Appointment bookAppointmentInClientApplication(Appointment appointment , LocalDate bookingDate) throws ClientAppointmentBookingException {
+
+        if (appointment.getClientID() == null) throw new ClientAppointmentBookingException("Client ID field cannot be null, Please try again!");
+        if (this.clientRepository.findById(appointment.getClientID()).isEmpty()) throw new ClientAppointmentBookingException("Client ID not found in database, please retry again");
+        if (appointment.getDoctorID() == null) throw new ClientAppointmentBookingException("Doctor ID field cannot be null, Please try again!");
+        if (this.doctorRepository.findById(appointment.getDoctorID()).isEmpty()) throw new ClientAppointmentBookingException("Doctor ID not found in database, please retry again");
+        if (appointment.getAppointmentDescription() == null) throw new ClientAppointmentBookingException("Appoint description cannot be null, please try again!");
+        if (appointment.getPaymentStatus() == null) throw new ClientAppointmentBookingException("Payment Status field cannot be null");
+        if (appointment.getDoctorConfirmationStatus() == null) throw new ClientAppointmentBookingException("Doctor Confirmation field cannot be null, please retry again!");
+        if (appointment.getAppointmentDate() == null) throw new ClientAppointmentBookingException("Appointment Date field cannot be null, please retry again!");
+        if (appointment.getAppointmentDate().isBefore(bookingDate)) throw new ClientAppointmentBookingException("Cannot book to previous date, Please book for future dates");
+        if (appointment.getAppointmentSlot() == null) throw new ClientAppointmentBookingException("Appointment Slot field cannot be null, please retry again!");
+
+
+        // Try using number of slots as variable
+        if (appointment.getAppointmentSlot() > 4 && appointment.getAppointmentSlot() <= 0) throw new ClientAppointmentBookingException("Appointment Slots must be in range of 1 to "+4);
+        if (!this.appointmentRepository.findByDoctorIDAndAppointmentDateAndAndAppointmentSlot(appointment.getDoctorID(),appointment.getAppointmentDate(),appointment.getAppointmentSlot()).isEmpty()) throw new ClientAppointmentBookingException("Slot Already booked, please try booking another slot");
+
+        this.clientRepository.getReferenceById(appointment.getClientID()).getAppointmentList().add(appointment);
+        this.doctorRepository.getReferenceById(appointment.getDoctorID()).getAppointmentList().add(appointment);
+
+        return this.appointmentRepository.save(appointment);
     }
 }
