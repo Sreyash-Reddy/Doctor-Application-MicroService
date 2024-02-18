@@ -44,6 +44,8 @@ public class DoctorController {
                 .build());
     }
 
+
+
     @DeleteMapping("delete/doctor")
     public Doctor deleteDoctorAccountFromApplication(@RequestBody DoctorDeleteDto doctorDeleteDto) throws DoctorDeletionException {
         return this.doctorService.deleteDoctorAccountFromApplication(doctorDeleteDto.getEmail(),doctorDeleteDto.getPassword());

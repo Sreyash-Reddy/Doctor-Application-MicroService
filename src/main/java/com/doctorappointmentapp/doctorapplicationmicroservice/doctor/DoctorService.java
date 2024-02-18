@@ -13,4 +13,6 @@ public interface DoctorService {
     Doctor updateDoctorAccountIntoApplication(Doctor doctorUpdatedDoctorInformation) throws DoctorUpdationException;
 
     Doctor deleteDoctorAccountFromApplication(String email, String password) throws DoctorDeletionException;
+
+    void deleteAllDoctors();
 }
