@@ -3,6 +3,7 @@ package com.doctorappointmentapp.doctorapplicationmicroservice.doctor;
 import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.Appointment;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface DoctorService {
@@ -17,4 +18,8 @@ public interface DoctorService {
     void deleteAllDoctors();
 
     List<Appointment> getAllAppointments(Integer doctorID) throws DoctorAppointmentsFetchingException;
+
+    List<Appointment> getAllPreviousAppointments(Integer doctorID, LocalDate currentDate) throws DoctorAppointmentsFetchingException;
+
+    List <Appointment> getAllFutureAppointments(Integer id, LocalDate of) throws DoctorAppointmentsFetchingException;
 }

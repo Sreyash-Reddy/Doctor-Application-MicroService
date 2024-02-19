@@ -1,11 +1,14 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.doctortest;
 
+import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientAppointmentsFetchingException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.*;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.DoctorService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
 
 @SpringBootTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -267,4 +270,50 @@ public class DoctorServiceTest {
         }
         Assertions.assertThrows(DoctorAppointmentsFetchingException.class, () -> this.doctorService.getAllAppointments(internalTestDoctor.getId()));
     }
+  // testcases for viewing previous appointments for Doctor
+  @Test
+  void when_getPreviousAppointments_is_called_with_valid_input_return_the_List_of_Appointments(){
+      try {
+          Assertions.assertNotNull(this.doctorService.getAllPreviousAppointments(internalTestDoctor.getId(), LocalDate.of(2024,2,19)));
+      } catch (DoctorAppointmentsFetchingException e) {
+          throw new RuntimeException(e);
+      }
+  }
+
+    @Test
+    void when_getPreviousAppointments_is_called_with_null_id_input_throw_DoctorAppointmentsFetchingException(){
+        Assertions.assertThrows(DoctorAppointmentsFetchingException.class,()->this.doctorService.getAllPreviousAppointments(null,LocalDate.of(2024,2,19)));
+    }
+    @Test
+    void when_getPreviousAppointments_is_called_with_nonExisting_id_input_throw_DoctorAppointmentsFetchingException(){
+        Assertions.assertThrows(DoctorAppointmentsFetchingException.class,()->this.doctorService.getAllPreviousAppointments(-1,LocalDate.of(2024,2,19)));
+    }
+
+    @Test
+    void when_getPreviousAppointments_is_called_with_null_date_input_throw_DoctorAppointmentsFetchingException(){
+        Assertions.assertThrows(DoctorAppointmentsFetchingException.class,()->this.doctorService.getAllPreviousAppointments(internalTestDoctor.getId(),null));
+    }
+    // TEST CASES  FOR FUTURE APPOINTMENTS
+    @Test
+    void when_getFutureAppointments_is_called_with_valid_input_return_the_List_of_Appointments(){
+        try {
+            Assertions.assertNotNull(this.doctorService.getAllFutureAppointments(internalTestDoctor.getId(), LocalDate.of(2024,2,19)));
+        } catch (DoctorAppointmentsFetchingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @Test
+    void when_getFutureAppointments_is_called_with_null_id_input_throw_DoctorAppointmentsFetchingException(){
+        Assertions.assertThrows(DoctorAppointmentsFetchingException.class,()->this.doctorService.getAllFutureAppointments(null,LocalDate.of(2024,2,19)));
+    }
+    @Test
+    void when_getFutureAppointments_is_called_with_nonExisting_id_input_throw_DoctorAppointmentsFetchingException(){
+        Assertions.assertThrows(DoctorAppointmentsFetchingException.class,()->this.doctorService.getAllFutureAppointments(-1,LocalDate.of(2024,2,19)));
+    }
+    @Test
+    void when_getFutureAppointments_is_called_with_null_date_input_throw_DoctorAppointmentsFetchingException(){
+        Assertions.assertThrows(DoctorAppointmentsFetchingException.class,()->this.doctorService.getAllFutureAppointments(internalTestDoctor.getId(),null));
+    }
+
+
 }
