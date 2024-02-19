@@ -42,6 +42,10 @@ public class ClientAppointmentController {
         return this.clientService.getAllPreviousAppointments(clientID,LocalDate.of(year,month,day));
     }
 
+    @GetMapping("client/get-all-future-appointments/clientID={clientID}-year={year}-month={month}-day={day}")
+    public List<Appointment> getAllFutureAppointments(@PathVariable Integer clientID, @PathVariable Integer year, @PathVariable Integer month, @PathVariable Integer day) throws ClientAppointmentsFetchingException {
+        return this.clientService.getAllFutureAppointments(clientID,LocalDate.of(year,month,day));
+    }
 
 
 }

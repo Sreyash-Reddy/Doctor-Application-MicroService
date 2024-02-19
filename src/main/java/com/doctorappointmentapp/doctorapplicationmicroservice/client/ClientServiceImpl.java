@@ -148,4 +148,13 @@ public class ClientServiceImpl implements ClientService{
         if (currentDate == null) throw new ClientAppointmentsFetchingException("Current Date slot cannot be null, Please retry again");
         return this.appointmentRepository.findAppointmentByClientID(clientID).stream().filter(appointment -> appointment.getAppointmentDate().isBefore(currentDate)).collect(Collectors.toList());
     }
+
+    @Override
+    public List<Appointment> getAllFutureAppointments(Integer clientID, LocalDate currentDate) throws ClientAppointmentsFetchingException {
+        if (clientID == null) throw new ClientAppointmentsFetchingException("Client ID field cannot be null, Please retry again!");
+        if (this.clientRepository.findById(clientID).isEmpty()) throw new ClientAppointmentsFetchingException("Client ID doesn't exist, please retry again");
+        if (currentDate == null) throw new ClientAppointmentsFetchingException("Current Date slot cannot be null, Please retry again");
+        return this.appointmentRepository.findAppointmentByClientID(clientID).stream().filter(appointment -> appointment.getAppointmentDate().isAfter(currentDate)).collect(Collectors.toList());
+    }
+
 }
