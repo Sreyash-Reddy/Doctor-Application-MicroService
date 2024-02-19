@@ -1,4 +1,4 @@
-package com.doctorappointmentapp.doctorapplicationmicroservice.doctor;
+package com.doctorappointmentapp.doctorapplicationmicroservice.doctor.controllers;
 
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorDeletionException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorLoginException;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class DoctorControllerAdvice {
+public class DoctorInformationControllerAdvice {
 
     @ExceptionHandler(value = {DoctorRegistrationException.class})
     public ResponseEntity<String> doctorRegistrationExceptionHandler(DoctorRegistrationException doctorRegistrationException){

@@ -1,5 +1,7 @@
-package com.doctorappointmentapp.doctorapplicationmicroservice.doctor;
+package com.doctorappointmentapp.doctorapplicationmicroservice.doctor.controllers;
 
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.DoctorService;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.dto.DoctorDeleteDto;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.dto.DoctorLoginDTO;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.dto.DoctorRegistrationDTO;
@@ -11,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class DoctorController {
+public class DoctorInformationController {
     @Autowired
     private DoctorService doctorService;
 
