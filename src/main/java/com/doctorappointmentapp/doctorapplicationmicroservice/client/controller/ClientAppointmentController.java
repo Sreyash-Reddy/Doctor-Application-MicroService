@@ -10,6 +10,8 @@ import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ClientAppointmentController {
     @Autowired
@@ -27,6 +29,11 @@ public class ClientAppointmentController {
                 .doctorID(clientBookAppointmentDTO.getDoctorID())
                 .build();
         return this.clientService.bookAppointmentInClientApplication(appointment , clientBookAppointmentDTO.getBookingDate());
+    }
+
+    @GetMapping("client/get-all-appointments/clientID={clientID}")
+    public List<Appointment> getAllAppointments(@PathVariable Integer clientID) throws ClientAppointmentsFetchingException {
+        return this.clientService.getAllAppointments(clientID);
     }
 
 

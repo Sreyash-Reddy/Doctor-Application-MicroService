@@ -5,6 +5,7 @@ import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientB
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface ClientService {
     Client registerNewClientAccountIntoApplication(Client client) throws ClientRegistrationException;
@@ -19,4 +20,6 @@ public interface ClientService {
 
 
     Appointment bookAppointmentInClientApplication(Appointment appointment , LocalDate bookingDate) throws ClientAppointmentBookingException;
+
+    List<Appointment> getAllAppointments(Integer clientID) throws ClientAppointmentsFetchingException;
 }
