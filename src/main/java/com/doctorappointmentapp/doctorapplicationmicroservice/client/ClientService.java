@@ -22,4 +22,6 @@ public interface ClientService {
     Appointment bookAppointmentInClientApplication(Appointment appointment , LocalDate bookingDate) throws ClientAppointmentBookingException;
 
     List<Appointment> getAllAppointments(Integer clientID) throws ClientAppointmentsFetchingException;
+
+    List<Appointment> getAllPreviousAppointments(Integer clientID, LocalDate currentDate) throws ClientAppointmentsFetchingException;
 }
