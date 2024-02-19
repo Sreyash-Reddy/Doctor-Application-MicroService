@@ -51,5 +51,4 @@ public class DoctorController {
         return this.doctorService.deleteDoctorAccountFromApplication(doctorDeleteDto.getEmail(),doctorDeleteDto.getPassword());
     }
 
-
 }
