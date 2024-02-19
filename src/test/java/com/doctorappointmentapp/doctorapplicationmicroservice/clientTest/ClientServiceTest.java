@@ -577,19 +577,24 @@ public class ClientServiceTest {
         }
     }
 
+    @Test
+    void when_getAllAppointments_is_called_with_valid_input_return_the_List_of_Appointments(){
+        try {
+            Assertions.assertNotNull(this.clientService.getAllAppointments(internalTestClient.getId()));
+        } catch (ClientAppointmentsFetchingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    @Test
+    void when_getAllAppointments_is_called_with_null_id_input_return_the_List_of_Appointments(){
+        Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllAppointments(null));
+    }
 
-
-
-
-
-
-
-
-
-
-
-
+    @Test
+    void when_getAllAppointments_is_called_with_non_Existing_id_input_return_the_List_of_Appointments(){
+        Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllAppointments(-1));
+    }
 
 
 

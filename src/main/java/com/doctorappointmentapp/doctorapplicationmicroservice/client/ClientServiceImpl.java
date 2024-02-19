@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -130,5 +131,12 @@ public class ClientServiceImpl implements ClientService{
         this.doctorRepository.getReferenceById(appointment.getDoctorID()).getAppointmentList().add(appointment);
 
         return this.appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public List<Appointment> getAllAppointments(Integer clientID) throws ClientAppointmentsFetchingException {
+        if (clientID == null) throw new ClientAppointmentsFetchingException("Client ID field cannot be null, Please retry again!");
+        if (this.clientRepository.findById(clientID).isEmpty()) throw new ClientAppointmentsFetchingException("Client ID doesn't exist, please retry again");
+        return this.appointmentRepository.findAppointmentByClientID(clientID);
     }
 }
