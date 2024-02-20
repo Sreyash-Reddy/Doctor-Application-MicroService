@@ -296,6 +296,8 @@ public class ClientServiceTest {
         try {
             Assertions.assertNotNull(this.clientService.getAllAvailableDoctorsSortedBy("experience"));
             Assertions.assertNotNull(this.clientService.getAllAvailableDoctorsSortedBy("consultancy-fee"));
+            Assertions.assertNotNull(this.clientService.getAllAvailableDoctorsSortedBy("name"));
+            Assertions.assertNotNull(this.clientService.getAllAvailableDoctorsSortedBy("specialization"));
         } catch (ClientDoctorSearchingException e) {
             throw new RuntimeException(e);
         }

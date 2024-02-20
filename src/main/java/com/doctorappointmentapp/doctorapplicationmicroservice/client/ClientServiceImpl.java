@@ -133,6 +133,8 @@ public class ClientServiceImpl implements ClientService{
     public List<Doctor> getAllAvailableDoctorsSortedBy(String attribute) throws ClientDoctorSearchingException {
         if (attribute.equalsIgnoreCase("experience")) return this.getAvailableDoctors().stream().sorted(Comparator.comparing(Doctor::getExperience)).collect(Collectors.toList());
         else if (attribute.equalsIgnoreCase("consultancy-fee")) return this.getAvailableDoctors().stream().sorted(Comparator.comparing(Doctor::getConsultancyFee)).collect(Collectors.toList());
+        else if(attribute.equalsIgnoreCase("name")) return this.getAvailableDoctors().stream().sorted(Comparator.comparing(Doctor::getName)).collect(Collectors.toList());
+        else if(attribute.equalsIgnoreCase("specialization")) return this.getAvailableDoctors().stream().sorted(Comparator.comparing(Doctor::getSpecialization)).collect(Collectors.toList());
         else throw new ClientDoctorSearchingException("Search Attribute Invalid! Please Try Again!");
     }
 
