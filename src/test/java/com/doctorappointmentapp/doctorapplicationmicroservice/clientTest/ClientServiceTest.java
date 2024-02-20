@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @SpringBootTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -249,10 +248,63 @@ public class ClientServiceTest {
     }
 
 
+    // TEST CASES FOR SEARCHING AVAILABLE DOCTORS FUNCTIONALITY
+    @Test
+    void when_getAvailableDoctors_is_called_return_list_of_available_doctors() {
+        Assertions.assertNotNull(this.clientService.getAvailableDoctors());
+    }
+    @Test
+    void when_getAvailableDoctorsByName_is_called_with_notNull_name_return_list_of_Doctors(){
+        try {
+            Assertions.assertNotNull(this.clientService.getAvailableDoctorsByName("doc"));
+        } catch (ClientDoctorSearchingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @Test
+    void when_getAvailableDoctorsByName_is_called_with_null_name_throw_ClientDoctorSearchingException(){
+        Assertions.assertThrows(ClientDoctorSearchingException.class,()->this.clientService.getAvailableDoctorsByName(null));
+    }
+    @Test
+    void when_getAvailableDoctorsByName_is_called_with_blank_name_throw_ClientDoctorSearchingException(){
+        Assertions.assertThrows(ClientDoctorSearchingException.class,()->this.clientService.getAvailableDoctorsByName(""));
+    }
 
+    //TEST CASES FOR DOCTOR SPECIALIZATIONS
+    @Test
+    void when_getAllAvailableDoctorsBySpecialization_is_called_with_valid_input_returns_list_of_doctors(){
+        try {
+            Assertions.assertNotNull(this.clientService.getAllAvailableDoctorsBySpecialization("Physician"));
+        } catch (ClientDoctorSearchingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    @Test
+    void when_getAllAvailableDoctorsBySpecialization_is_called_with_null_specialization_throws_ClientDoctorSearchingException() {
+        Assertions.assertThrows(ClientDoctorSearchingException.class, ()->this.clientService.getAllAvailableDoctorsBySpecialization(null));
+    }
 
+    @Test
+    void when_getAllAvailableDoctorsBySpecialization_is_called_with_blank_specialization_throws_ClientDoctorSearchingException() {
+        Assertions.assertThrows(ClientDoctorSearchingException.class, ()->this.clientService.getAllAvailableDoctorsBySpecialization(""));
+    }
 
+    //DOCTOR SORTING TESTCASES BY ATTRIBUTE
+    @Test
+    void when_getAllAvailableDoctorsSortedBy_is_called_with_valid_attribute_return_sorted_list_of_doctors() {
+        try {
+            Assertions.assertNotNull(this.clientService.getAllAvailableDoctorsSortedBy("experience"));
+            Assertions.assertNotNull(this.clientService.getAllAvailableDoctorsSortedBy("consultancy-fee"));
+        } catch (ClientDoctorSearchingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void when_getAllAvailableDoctorsSortedBy_is_called_with_invalid_attribute_throws_ClientDoctorSearchingException() {
+        Assertions.assertThrows(ClientDoctorSearchingException.class, ()->this.clientService.getAllAvailableDoctorsSortedBy("wrong-attribute"));
+    }
     //Client Appointment Functionality Test Cases
 
     @Test
@@ -645,27 +697,7 @@ public class ClientServiceTest {
     void when_getFutureAppointments_is_called_with_null_date_input_throw_ClientAppointmentsFetchingException(){
         Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllPreviousAppointments(internalTestClient.getId(),null));
     }
-    // TEST CASES FOR SEARCHING AVAILABLE DOCTORS FUNCTIONALITY
-    @Test
-    void when_getAvailableDoctors_is_called_return_list_of_available_doctors() {
-        Assertions.assertNotNull(this.clientService.getAvailableDoctors());
-    }
-    @Test
-    void when_getAvailableDoctorsByName_is_called_with_notNull_name_return_list_of_Doctors(){
-        try {
-            Assertions.assertNotNull(this.clientService.getAvailableDoctorsByName("doc"));
-        } catch (ClientDoctorSearchingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    @Test
-    void when_getAvailableDoctorsByName_is_called_with_null_name_throw_ClientDoctorSearchingException(){
-        Assertions.assertThrows(ClientDoctorSearchingException.class,()->this.clientService.getAvailableDoctorsByName(null));
-    }
-    @Test
-    void when_getAvailableDoctorsByName_is_called_with_blank_name_throw_ClientDoctorSearchingException(){
-        Assertions.assertThrows(ClientDoctorSearchingException.class,()->this.clientService.getAvailableDoctorsByName(""));
-    }
+
 
 
 }

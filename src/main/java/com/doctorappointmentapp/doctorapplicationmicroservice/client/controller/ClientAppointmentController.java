@@ -23,17 +23,20 @@ public class ClientAppointmentController {
     public List<Doctor> getAvailableDoctors(){
         return this.clientService.getAvailableDoctors();
     }
-    @GetMapping ("client/available-doctors/doctorName={doctorName}")
+    @GetMapping ("client/available-doctors/doctor-name={doctorName}")
     public List<Doctor> getAvailableDoctorsByName(@PathVariable String doctorName) throws ClientDoctorSearchingException{
         return this.clientService.getAvailableDoctorsByName(doctorName);
     }
 
+    @GetMapping("client/available-doctors/specialization={specialization}")
+    public List<Doctor> getAllAvailableDoctorsBySpecialization(@PathVariable String specialization) throws ClientDoctorSearchingException {
+        return this.clientService.getAllAvailableDoctorsBySpecialization(specialization);
+    }
 
-
-
-
-
-
+    @GetMapping("client/available-doctors/sort-by={attribute}")
+    public List<Doctor> getAllAvailableDoctorsSortedBy(@PathVariable String attribute) throws ClientDoctorSearchingException {
+        return this.clientService.getAllAvailableDoctorsSortedBy(attribute);
+    }
 
     @PostMapping("client/book-appointment")
     public Appointment bookAppointmentInClientApplication(@RequestBody ClientBookAppointmentDTO clientBookAppointmentDTO) throws ClientAppointmentBookingException {
@@ -63,6 +66,5 @@ public class ClientAppointmentController {
     public List<Appointment> getAllFutureAppointments(@PathVariable Integer clientID, @PathVariable Integer year, @PathVariable Integer month, @PathVariable Integer day) throws ClientAppointmentsFetchingException {
         return this.clientService.getAllFutureAppointments(clientID,LocalDate.of(year,month,day));
     }
-
 
 }

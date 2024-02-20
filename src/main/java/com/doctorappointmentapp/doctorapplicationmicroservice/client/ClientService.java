@@ -20,7 +20,8 @@ public interface ClientService {
     void deleteAllClients();
     List<Doctor> getAvailableDoctors();
     List<Doctor> getAvailableDoctorsByName(String doctorName) throws ClientDoctorSearchingException;
-
+    List<Doctor> getAllAvailableDoctorsBySpecialization(String specialization) throws ClientDoctorSearchingException;
+    List<Doctor> getAllAvailableDoctorsSortedBy(String attribute) throws ClientDoctorSearchingException;
     Appointment bookAppointmentInClientApplication(Appointment appointment , LocalDate bookingDate) throws ClientAppointmentBookingException;
 
     List<Appointment> getAllAppointments(Integer clientID) throws ClientAppointmentsFetchingException;
@@ -28,6 +29,5 @@ public interface ClientService {
     List<Appointment> getAllPreviousAppointments(Integer clientID, LocalDate currentDate) throws ClientAppointmentsFetchingException;
 
     List<Appointment> getAllFutureAppointments(Integer clientID, LocalDate currentDate) throws ClientAppointmentsFetchingException;
-
 
 }

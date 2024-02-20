@@ -15,6 +15,7 @@ public interface DoctorRepository extends JpaRepository<Doctor,Integer> {
     List<Doctor> findByIsActive(Boolean isActive);
     List<Doctor> findByNameAndIsActive(String doctorName,Boolean isActive);
 
+    List<Doctor> findBySpecializationAndIsActive(String specialization, Boolean isActive);
     @Override
     void deleteAll();
 

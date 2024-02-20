@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,17 +30,6 @@ public class ClientServiceImpl implements ClientService{
 
 //    @Value("$numberOfSlots")
 //    private String numberOfSlots;
-    @Override
-    public List<Doctor> getAvailableDoctors() {
-        return this.doctorRepository.findByIsActive(true);
-    }
-
-    @Override
-    public List<Doctor> getAvailableDoctorsByName(String doctorName) throws ClientDoctorSearchingException{
-        if (doctorName==null) throw new ClientDoctorSearchingException("Doctor's Name Cannot Be Null, Please Try Again");
-        if (doctorName.isEmpty())  throw new ClientDoctorSearchingException("Doctor's Name Cannot Be Blank, Please Try Again");
-        return this.doctorRepository.findByNameAndIsActive(doctorName,true);
-    }
 
     @Override
     public Client registerNewClientAccountIntoApplication(Client client) throws ClientRegistrationException {
@@ -122,6 +112,31 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
+    public List<Doctor> getAvailableDoctors() {
+        return this.doctorRepository.findByIsActive(true);
+    }
+
+    @Override
+    public List<Doctor> getAvailableDoctorsByName(String doctorName) throws ClientDoctorSearchingException{
+        if (doctorName==null) throw new ClientDoctorSearchingException("Doctor's Name Cannot Be Null, Please Try Again");
+        if (doctorName.isEmpty())  throw new ClientDoctorSearchingException("Doctor's Name Cannot Be Blank, Please Try Again");
+        return this.doctorRepository.findByNameAndIsActive(doctorName, true);
+    }
+    @Override
+    public List<Doctor> getAllAvailableDoctorsBySpecialization(String specialization) throws ClientDoctorSearchingException {
+        if (specialization == null) throw new ClientDoctorSearchingException("Doctor's Specialization Cannot Be Null! Please Try Again!");
+        if (specialization.isEmpty()) throw new ClientDoctorSearchingException("Doctor's Specialization Cannot Be Blank! Please Try Again!");
+        return this.doctorRepository.findBySpecializationAndIsActive(specialization, true);
+    }
+
+    @Override
+    public List<Doctor> getAllAvailableDoctorsSortedBy(String attribute) throws ClientDoctorSearchingException {
+        if (attribute.equalsIgnoreCase("experience")) return this.getAvailableDoctors().stream().sorted(Comparator.comparing(Doctor::getExperience)).collect(Collectors.toList());
+        else if (attribute.equalsIgnoreCase("consultancy-fee")) return this.getAvailableDoctors().stream().sorted(Comparator.comparing(Doctor::getConsultancyFee)).collect(Collectors.toList());
+        else throw new ClientDoctorSearchingException("Search Attribute Invalid! Please Try Again!");
+    }
+
+    @Override
     public Appointment bookAppointmentInClientApplication(Appointment appointment , LocalDate bookingDate) throws ClientAppointmentBookingException {
 
         if (appointment.getClientID() == null) throw new ClientAppointmentBookingException("Client ID field cannot be null, Please try again!");
@@ -168,7 +183,6 @@ public class ClientServiceImpl implements ClientService{
         if (currentDate == null) throw new ClientAppointmentsFetchingException("Current Date slot cannot be null, Please retry again");
         return this.appointmentRepository.findAppointmentByClientID(clientID).stream().filter(appointment -> appointment.getAppointmentDate().isAfter(currentDate)).collect(Collectors.toList());
     }
-
 
 
 }
