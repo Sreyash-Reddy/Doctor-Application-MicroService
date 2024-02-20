@@ -1,21 +1,24 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.doctor;
 
-import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorDeletionException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorLoginException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorRegistrationException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorUpdationException;
+import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.Appointment;
+import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.AppointmentRepository;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DoctorServiceImpl implements DoctorService{
 
     @Autowired
     private DoctorRepository doctorRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
     @Override
     public Doctor registerNewDoctorAccountIntoApplication(Doctor doctor) throws DoctorRegistrationException {
         if (doctor == null) throw new DoctorRegistrationException("Null Data Received, Please verify and Register Again");
@@ -98,6 +101,33 @@ public class DoctorServiceImpl implements DoctorService{
     @Override
     public void deleteAllDoctors() {
         this.doctorRepository.deleteAll();
+    }
+
+    @Override
+    public List<Appointment> getAllAppointments(Integer doctorID) throws DoctorAppointmentsFetchingException {
+        if (doctorID == null) throw new DoctorAppointmentsFetchingException("Doctor ID field cannot be null, Please retry again!");
+        if (this.doctorRepository.findById(doctorID).isEmpty()) throw new DoctorAppointmentsFetchingException("Doctor ID doesn't exist, please retry again");
+        if(!this.doctorRepository.findById(doctorID).get().getIsActive()) throw new DoctorAppointmentsFetchingException("Given Doctor ID is currently inactive! Please retry!");
+        return this.appointmentRepository.findAppointmentByDoctorID(doctorID);
+    }
+
+    @Override
+    public List<Appointment> getAllPreviousAppointments(Integer doctorID, LocalDate currentDate) throws DoctorAppointmentsFetchingException{
+        if(doctorID==null) throw new DoctorAppointmentsFetchingException("Doctor ID field cannot be null, Please retry again!");
+        if (this.doctorRepository.findById(doctorID).isEmpty()) throw new DoctorAppointmentsFetchingException("Doctor ID doesn't exist, please retry again");
+        if (currentDate==null) throw new  DoctorAppointmentsFetchingException("Date field cannot be null, Please retry again!");
+        return this.appointmentRepository.findAppointmentByDoctorID(doctorID).stream().filter(appointment -> appointment.getAppointmentDate().isBefore(currentDate)).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<Appointment> getAllFutureAppointments(Integer doctorID, LocalDate currentDate) throws DoctorAppointmentsFetchingException {
+        if(doctorID==null) throw new DoctorAppointmentsFetchingException("Doctor ID field cannot be null, Please retry again!");
+        if (this.doctorRepository.findById(doctorID).isEmpty()) throw new DoctorAppointmentsFetchingException("Doctor ID doesn't exist, please retry again");
+        if (currentDate==null) throw new  DoctorAppointmentsFetchingException("Date field cannot be null, Please retry again!");
+        return this.appointmentRepository.findAppointmentByDoctorID(doctorID).stream().filter(appointment -> appointment.getAppointmentDate().isAfter(currentDate)).collect(Collectors.toList());
+
+
     }
 
 

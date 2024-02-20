@@ -623,5 +623,26 @@ public class ClientServiceTest {
     void when_getPreviousAppointments_is_called_with_null_date_input_throw_ClientAppointmentsFetchingException(){
         Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllPreviousAppointments(internalTestClient.getId(),null));
     }
+// TEST CASES FOR FUTURE APPOINTMENTS
+    @Test
+    void when_getFutureAppointments_is_called_with_valid_input_return_the_List_of_Appointments(){
+        try {
+            Assertions.assertNotNull(this.clientService.getAllPreviousAppointments(internalTestClient.getId(),LocalDate.of(2024,2,19)));
+        } catch (ClientAppointmentsFetchingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @Test
+    void when_getFutureAppointments_is_called_with_null_id_input_throw_ClientAppointmentsFetchingException(){
+        Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllPreviousAppointments(null,LocalDate.of(2024,2,19)));
+    }
 
+    @Test
+    void when_getFutureAppointments_is_called_with_nonExisting_id_input_throw_ClientAppointmentsFetchingException(){
+        Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllPreviousAppointments(-1,LocalDate.of(2024,2,19)));
+    }
+    @Test
+    void when_getFutureAppointments_is_called_with_null_date_input_throw_ClientAppointmentsFetchingException(){
+        Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllPreviousAppointments(internalTestClient.getId(),null));
+    }
 }
