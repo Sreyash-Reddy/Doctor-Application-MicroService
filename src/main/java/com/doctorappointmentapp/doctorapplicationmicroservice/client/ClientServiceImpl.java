@@ -164,6 +164,19 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
+    public Appointment makePaymentForAppointment(Integer appointmentID) throws ClientAppointmentPaymentException {
+        if (appointmentID==null) throw new ClientAppointmentPaymentException("Appointment ID cannot BE Null, Please Try Again");
+        Optional<Appointment> appointmentOpt=this.appointmentRepository.findAppointmentById(appointmentID);
+        if (appointmentOpt.isEmpty() ) throw new ClientAppointmentPaymentException("Appointment for the given ID does not exist!, Please try again ");
+        Appointment foundAppointment=appointmentOpt.get();
+        if (foundAppointment.getPaymentStatus()) throw new ClientAppointmentPaymentException("Payment has already been made.");
+        foundAppointment.setPaymentStatus(true);
+        this.appointmentRepository.save(foundAppointment);
+        return foundAppointment;
+
+    }
+
+    @Override
     public List<Appointment> getAllAppointments(Integer clientID) throws ClientAppointmentsFetchingException {
         if (clientID == null) throw new ClientAppointmentsFetchingException("Client ID field cannot be null, Please retry again!");
         if (this.clientRepository.findById(clientID).isEmpty()) throw new ClientAppointmentsFetchingException("Client ID doesn't exist, please retry again");
@@ -184,6 +197,11 @@ public class ClientServiceImpl implements ClientService{
         if (this.clientRepository.findById(clientID).isEmpty()) throw new ClientAppointmentsFetchingException("Client ID doesn't exist, please retry again");
         if (currentDate == null) throw new ClientAppointmentsFetchingException("Current Date slot cannot be null, Please retry again");
         return this.appointmentRepository.findAppointmentByClientID(clientID).stream().filter(appointment -> appointment.getAppointmentDate().isAfter(currentDate)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteAllAppointments() {
+        this.appointmentRepository.deleteAll();
     }
 
 

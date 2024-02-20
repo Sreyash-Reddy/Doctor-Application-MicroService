@@ -51,6 +51,11 @@ public class ClientAppointmentController {
                 .build();
         return this.clientService.bookAppointmentInClientApplication(appointment , clientBookAppointmentDTO.getBookingDate());
     }
+    @PatchMapping("client/appointment/payment/appointmentID={appointmentID}")
+    public Appointment makePaymentForAppointment(@PathVariable  Integer appointmentID ) throws ClientAppointmentPaymentException{
+        return this.clientService.makePaymentForAppointment(appointmentID);
+    }
+
 
     @GetMapping("client/get-all-appointments/clientID={clientID}")
     public List<Appointment> getAllAppointments(@PathVariable Integer clientID) throws ClientAppointmentsFetchingException {

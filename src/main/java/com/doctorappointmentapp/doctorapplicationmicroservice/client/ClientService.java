@@ -23,11 +23,13 @@ public interface ClientService {
     List<Doctor> getAllAvailableDoctorsBySpecialization(String specialization) throws ClientDoctorSearchingException;
     List<Doctor> getAllAvailableDoctorsSortedBy(String attribute) throws ClientDoctorSearchingException;
     Appointment bookAppointmentInClientApplication(Appointment appointment , LocalDate bookingDate) throws ClientAppointmentBookingException;
-
+    Appointment makePaymentForAppointment(Integer appointmentID) throws ClientAppointmentPaymentException;
     List<Appointment> getAllAppointments(Integer clientID) throws ClientAppointmentsFetchingException;
 
     List<Appointment> getAllPreviousAppointments(Integer clientID, LocalDate currentDate) throws ClientAppointmentsFetchingException;
 
     List<Appointment> getAllFutureAppointments(Integer clientID, LocalDate currentDate) throws ClientAppointmentsFetchingException;
+
+    void deleteAllAppointments();
 
 }

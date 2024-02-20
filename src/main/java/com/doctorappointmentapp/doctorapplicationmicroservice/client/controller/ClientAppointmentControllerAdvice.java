@@ -1,6 +1,7 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.client.controller;
 
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientAppointmentBookingException;
+import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientAppointmentPaymentException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientAppointmentsFetchingException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientDoctorSearchingException;
 import org.springframework.http.HttpStatus;
@@ -23,5 +24,10 @@ public class ClientAppointmentControllerAdvice {
     @ExceptionHandler(value={ClientDoctorSearchingException.class})
     public ResponseEntity<String> clientDoctorSearchingExceptionHandler(ClientDoctorSearchingException clientDoctorSearchingException){
         return new ResponseEntity<>(clientDoctorSearchingException.getMessage(),HttpStatus.FORBIDDEN);
+    }
+    @ExceptionHandler(value={ClientAppointmentPaymentException.class})
+    public  ResponseEntity<String>clientAppointmentPaymentExceptionHandler(ClientAppointmentPaymentException clientAppointmentPaymentException){
+        return new ResponseEntity<>(clientAppointmentPaymentException.getMessage(),HttpStatus.FORBIDDEN);
+
     }
 }

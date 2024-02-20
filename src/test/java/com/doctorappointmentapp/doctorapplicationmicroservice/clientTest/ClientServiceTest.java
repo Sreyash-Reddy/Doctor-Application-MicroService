@@ -27,13 +27,42 @@ public class ClientServiceTest {
     private Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("123").build();
     private Client externalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("externalTestClient@gmail.com").password("123").build();
 
+    private Doctor internalTestDoctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc@gmail.com").password("123").build();
+
+
+//    private Appointment internalAppointment;
+//    private Client internalTestClientResponse;
+//    private Doctor internalTestDoctorResponse;
+//
+//    {
+//        try {
+//            internalTestClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient);
+//            internalTestDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor);
+//        } catch (ClientRegistrationException | DoctorRegistrationException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
 
     @BeforeEach
     void beforeEachTest(){
         clientService.deleteAllClients();
+        doctorService.deleteAllDoctors();
+        clientService.deleteAllAppointments();
         try {
-            clientService.registerNewClientAccountIntoApplication(internalTestClient);
-        } catch (ClientRegistrationException e) {
+            Client internalTestClientResponse=clientService.registerNewClientAccountIntoApplication(internalTestClient);
+            Doctor internalTestDoctorResponse=doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor);
+//            internalAppointment = Appointment.builder()
+//                    .appointmentDescription("Test Appointment")
+//                    .paymentStatus(false)
+//                    .doctorConfirmationStatus(false)
+//                    .appointmentDate(LocalDate.of(2024,2,20))
+//                    .appointmentSlot(1)
+//                    .clientID(internalTestClientResponse.getId())
+//                    .doctorID(internalTestDoctorResponse.getId())
+//                    .build();
+//            clientService.bookAppointmentInClientApplication(internalAppointment,LocalDate.of(2024,2,19));
+        } catch (ClientRegistrationException | DoctorRegistrationException e) {
             throw new RuntimeException(e);
         }
     }
@@ -630,7 +659,31 @@ public class ClientServiceTest {
             throw new RuntimeException(e);
         }
     }
-
+    //TEST CASES FOR APPOINTMENT PAYMENTS
+//    @Test
+//    void when_makePaymentForAppointment_is_called_with_notnull_appointmentID_return_appointment_object(){
+//        try {
+//            Assertions.assertNotNull(this.clientService.makePaymentForAppointment(internalAppointment.getId()));
+//        } catch (ClientAppointmentPaymentException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+    @Test
+    void when_makePaymentForAppointment_is_called_with_null_appointmentID_throw_ClientAppointmentPaymentException() {
+        Assertions.assertThrows(ClientAppointmentPaymentException.class,()->this.clientService.makePaymentForAppointment(null));
+    }
+   @Test
+    void when_makePaymentForAppointment_is_called_with_notNull_nonExisting_appointmentID_throw_ClientAppointmentPaymentException() {
+        Assertions.assertThrows(ClientAppointmentPaymentException.class,()->this.clientService.makePaymentForAppointment(1234));
+    }
+//    @Test
+//    void when_makePaymentForAppointment_is_called_with_notNull_already_paid_appointmentID_throw_ClientAppointmentPaymentException() {
+//        try {
+//            Assertions.assertNotNull(this.clientService.makePaymentForAppointment(internalAppointment.getId()));
+//            Assertions.assertThrows(ClientAppointmentPaymentException.class,()->this.clientService.makePaymentForAppointment(internalAppointment.getId()));
+//        } catch (ClientAppointmentPaymentException e) {
+//            throw new RuntimeException(e);
+//        } }
 
     //TEST CASES FOR GETTING APPOINTMENTS
 
