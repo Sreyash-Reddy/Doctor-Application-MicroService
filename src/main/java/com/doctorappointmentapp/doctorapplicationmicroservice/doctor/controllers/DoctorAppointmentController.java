@@ -2,11 +2,10 @@ package com.doctorappointmentapp.doctorapplicationmicroservice.doctor.controller
 
 import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.Appointment;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.DoctorService;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorAppointmentConfirmationException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorAppointmentsFetchingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,5 +26,10 @@ public class DoctorAppointmentController {
     @GetMapping("doctor/get-all-future-appointments/doctorID={doctorID}-year={year}-month={month}-day={day}")
     public List<Appointment>getAllFutureAppointments(@PathVariable Integer doctorID,@PathVariable Integer year,@PathVariable Integer month,@PathVariable Integer day) throws DoctorAppointmentsFetchingException{
         return this.doctorService.getAllFutureAppointments(doctorID, LocalDate.of(year,month,day));}
+
+    @PatchMapping("doctor/appointment/confirm/appointmentID={appointmentID}")
+    public Appointment confirmAppointment(@PathVariable Integer appointmentID) throws DoctorAppointmentConfirmationException {
+        return this.doctorService.confirmAppointment(appointmentID);
+    }
 
 }

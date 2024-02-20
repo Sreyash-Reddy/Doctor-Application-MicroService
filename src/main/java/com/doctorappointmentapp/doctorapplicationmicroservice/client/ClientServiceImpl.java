@@ -165,11 +165,12 @@ public class ClientServiceImpl implements ClientService{
 
     @Override
     public Appointment makePaymentForAppointment(Integer appointmentID) throws ClientAppointmentPaymentException {
-        if (appointmentID==null) throw new ClientAppointmentPaymentException("Appointment ID cannot BE Null, Please Try Again");
-        Optional<Appointment> appointmentOpt=this.appointmentRepository.findAppointmentById(appointmentID);
-        if (appointmentOpt.isEmpty() ) throw new ClientAppointmentPaymentException("Appointment for the given ID does not exist!, Please try again ");
-        Appointment foundAppointment=appointmentOpt.get();
+        if (appointmentID==null) throw new ClientAppointmentPaymentException("Appointment ID cannot be Null, please try again");
+        Optional<Appointment> appointmentOptional=this.appointmentRepository.findAppointmentById(appointmentID);
+        if (appointmentOptional.isEmpty() ) throw new ClientAppointmentPaymentException("Appointment for the given ID does not exist!, Please try again ");
+        Appointment foundAppointment=appointmentOptional.get();
         if (foundAppointment.getPaymentStatus()) throw new ClientAppointmentPaymentException("Payment has already been made.");
+        if(!foundAppointment.getDoctorConfirmationStatus()) throw new ClientAppointmentPaymentException("Appointment is yet to be approved by the Doctor, Please try again after sometime");
         foundAppointment.setPaymentStatus(true);
         this.appointmentRepository.save(foundAppointment);
         return foundAppointment;

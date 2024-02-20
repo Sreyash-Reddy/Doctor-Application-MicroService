@@ -94,13 +94,22 @@ public class DoctorServiceImpl implements DoctorService{
 
         this.doctorRepository.save(doctorToBeDeleted);
         return doctorToBeDeleted;
-
-
     }
 
     @Override
     public void deleteAllDoctors() {
         this.doctorRepository.deleteAll();
+    }
+
+    @Override
+    public Appointment confirmAppointment(Integer appointmentID) throws DoctorAppointmentConfirmationException {
+        if(appointmentID==null) throw new DoctorAppointmentConfirmationException("Appointment ID Cannot be Null, Please Try Again");
+        Optional<Appointment> appointmentOptional=this.appointmentRepository.findAppointmentById(appointmentID);
+        if(appointmentOptional.isEmpty()) throw new DoctorAppointmentConfirmationException("Appointment With Given ID Does Not Exist, Please Verify And Try Again");
+        Appointment foundAppointment=appointmentOptional.get();
+        foundAppointment.setDoctorConfirmationStatus(true);
+        this.appointmentRepository.save(foundAppointment);
+        return foundAppointment;
     }
 
     @Override
@@ -126,9 +135,6 @@ public class DoctorServiceImpl implements DoctorService{
         if (this.doctorRepository.findById(doctorID).isEmpty()) throw new DoctorAppointmentsFetchingException("Doctor ID doesn't exist, please retry again");
         if (currentDate==null) throw new  DoctorAppointmentsFetchingException("Date field cannot be null, Please retry again!");
         return this.appointmentRepository.findAppointmentByDoctorID(doctorID).stream().filter(appointment -> appointment.getAppointmentDate().isAfter(currentDate)).collect(Collectors.toList());
-
-
     }
-
 
 }

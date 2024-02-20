@@ -241,6 +241,29 @@ public class DoctorServiceTest {
         Assertions.assertThrows(DoctorDeletionException.class, () -> this.doctorService.deleteDoctorAccountFromApplication("nonExisting@gmail.com", internalTestDoctor.getPassword()));
     }
 
+
+    //Testcases for approving appointments functionality
+
+//    @Test
+//    void when_approveAppointment_is_called_with_notNull_appointmentId_return_the_Appointment_object(){
+//        Assertions.assertNotNull(this.doctorService.confirmAppointment(internalTestAppointment.getId()));
+//    }
+
+    @Test
+    void when_approveAppointment_is_called_with_null_appointmentId_throw_DoctorAppointmentConfirmationException(){
+        Assertions.assertThrows(DoctorAppointmentConfirmationException.class,()->this.doctorService.confirmAppointment(null));
+    }
+
+    @Test
+    void when_approveAppointment_is_called_with_notNull_nonExisting_appointmentId_throw_DoctorAppointmentConfirmationException(){
+        Assertions.assertThrows(DoctorAppointmentConfirmationException.class,()->this.doctorService.confirmAppointment(1234));
+    }
+
+
+
+
+
+    //Testcases for viewing appointments
     @Test
     void when_getAllAppointments_is_called_with_valid_input_return_list_of_appointments() {
         try {

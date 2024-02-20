@@ -17,9 +17,13 @@ public interface DoctorService {
 
     void deleteAllDoctors();
 
+    Appointment confirmAppointment(Integer appointmentID) throws DoctorAppointmentConfirmationException;
+
     List<Appointment> getAllAppointments(Integer doctorID) throws DoctorAppointmentsFetchingException;
 
     List<Appointment> getAllPreviousAppointments(Integer doctorID, LocalDate currentDate) throws DoctorAppointmentsFetchingException;
 
     List <Appointment> getAllFutureAppointments(Integer id, LocalDate of) throws DoctorAppointmentsFetchingException;
+
+
 }
