@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface DoctorRepository extends JpaRepository<Doctor,Integer> {
 
     Optional<Doctor> findByEmail(String email);
+    List<Doctor> findByIsActive(Boolean isActive);
+    List<Doctor> findByNameAndIsActive(String doctorName,Boolean isActive);
 
     @Override
     void deleteAll();

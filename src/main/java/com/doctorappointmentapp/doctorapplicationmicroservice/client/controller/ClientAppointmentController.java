@@ -7,6 +7,7 @@ import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientB
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientLoginDTO;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientRegistrationDTO;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.*;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,22 @@ import java.util.List;
 public class ClientAppointmentController {
     @Autowired
     private ClientService clientService;
+
+    @GetMapping("client/available-doctors")
+    public List<Doctor> getAvailableDoctors(){
+        return this.clientService.getAvailableDoctors();
+    }
+    @GetMapping ("client/available-doctors/doctorName={doctorName}")
+    public List<Doctor> getAvailableDoctorsByName(@PathVariable String doctorName) throws ClientDoctorSearchingException{
+        return this.clientService.getAvailableDoctorsByName(doctorName);
+    }
+
+
+
+
+
+
+
 
     @PostMapping("client/book-appointment")
     public Appointment bookAppointmentInClientApplication(@RequestBody ClientBookAppointmentDTO clientBookAppointmentDTO) throws ClientAppointmentBookingException {

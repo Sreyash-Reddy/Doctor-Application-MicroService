@@ -3,6 +3,7 @@ package com.doctorappointmentapp.doctorapplicationmicroservice.client;
 import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.Appointment;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientBookAppointmentDTO;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.*;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,7 +18,8 @@ public interface ClientService {
     Client deleteClientAccountFromApplication(String email, String password) throws ClientDeletionException;
 
     void deleteAllClients();
-
+    List<Doctor> getAvailableDoctors();
+    List<Doctor> getAvailableDoctorsByName(String doctorName) throws ClientDoctorSearchingException;
 
     Appointment bookAppointmentInClientApplication(Appointment appointment , LocalDate bookingDate) throws ClientAppointmentBookingException;
 
@@ -26,4 +28,6 @@ public interface ClientService {
     List<Appointment> getAllPreviousAppointments(Integer clientID, LocalDate currentDate) throws ClientAppointmentsFetchingException;
 
     List<Appointment> getAllFutureAppointments(Integer clientID, LocalDate currentDate) throws ClientAppointmentsFetchingException;
+
+
 }

@@ -3,6 +3,7 @@ package com.doctorappointmentapp.doctorapplicationmicroservice.client;
 import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.Appointment;
 import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.AppointmentRepository;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.*;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,17 @@ public class ClientServiceImpl implements ClientService{
 
 //    @Value("$numberOfSlots")
 //    private String numberOfSlots;
+    @Override
+    public List<Doctor> getAvailableDoctors() {
+        return this.doctorRepository.findByIsActive(true);
+    }
+
+    @Override
+    public List<Doctor> getAvailableDoctorsByName(String doctorName) throws ClientDoctorSearchingException{
+        if (doctorName==null) throw new ClientDoctorSearchingException("Doctor's Name Cannot Be Null, Please Try Again");
+        if (doctorName.isEmpty())  throw new ClientDoctorSearchingException("Doctor's Name Cannot Be Blank, Please Try Again");
+        return this.doctorRepository.findByNameAndIsActive(doctorName,true);
+    }
 
     @Override
     public Client registerNewClientAccountIntoApplication(Client client) throws ClientRegistrationException {
@@ -156,5 +168,7 @@ public class ClientServiceImpl implements ClientService{
         if (currentDate == null) throw new ClientAppointmentsFetchingException("Current Date slot cannot be null, Please retry again");
         return this.appointmentRepository.findAppointmentByClientID(clientID).stream().filter(appointment -> appointment.getAppointmentDate().isAfter(currentDate)).collect(Collectors.toList());
     }
+
+
 
 }

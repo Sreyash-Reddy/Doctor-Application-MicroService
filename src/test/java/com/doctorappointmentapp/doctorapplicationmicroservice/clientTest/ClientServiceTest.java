@@ -645,4 +645,27 @@ public class ClientServiceTest {
     void when_getFutureAppointments_is_called_with_null_date_input_throw_ClientAppointmentsFetchingException(){
         Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllPreviousAppointments(internalTestClient.getId(),null));
     }
+    // TEST CASES FOR SEARCHING AVAILABLE DOCTORS FUNCTIONALITY
+    @Test
+    void when_getAvailableDoctors_is_called_return_list_of_available_doctors() {
+        Assertions.assertNotNull(this.clientService.getAvailableDoctors());
+    }
+    @Test
+    void when_getAvailableDoctorsByName_is_called_with_notNull_name_return_list_of_Doctors(){
+        try {
+            Assertions.assertNotNull(this.clientService.getAvailableDoctorsByName("doc"));
+        } catch (ClientDoctorSearchingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @Test
+    void when_getAvailableDoctorsByName_is_called_with_null_name_throw_ClientDoctorSearchingException(){
+        Assertions.assertThrows(ClientDoctorSearchingException.class,()->this.clientService.getAvailableDoctorsByName(null));
+    }
+    @Test
+    void when_getAvailableDoctorsByName_is_called_with_blank_name_throw_ClientDoctorSearchingException(){
+        Assertions.assertThrows(ClientDoctorSearchingException.class,()->this.clientService.getAvailableDoctorsByName(""));
+    }
+
+
 }
