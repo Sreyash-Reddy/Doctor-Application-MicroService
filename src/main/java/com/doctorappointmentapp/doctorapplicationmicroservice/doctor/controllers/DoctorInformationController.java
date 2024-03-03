@@ -17,7 +17,7 @@ public class DoctorInformationController {
     @Autowired
     private DoctorService doctorService;
 
-    @PostMapping("register/doctor")
+    @PostMapping("sign-up/doctor")
     public Doctor registerNewDoctorAccountIntoApplication(@RequestBody DoctorRegistrationDTO newDoctorInputInformation) throws DoctorRegistrationException {
         return this.doctorService.registerNewDoctorAccountIntoApplication(Doctor.builder().name(newDoctorInputInformation.getName())
                 .specialization(newDoctorInputInformation.getSpecialization())
@@ -34,7 +34,7 @@ public class DoctorInformationController {
         return this.doctorService.loginDoctorAccountIntoApplication(doctorLoginInformation.getEmail(), doctorLoginInformation.getPassword());
     }
 
-    @PutMapping("update/doctor")
+    @PutMapping("update_account/doctor")
     public Doctor updateDoctorAccountIntoApplication(@RequestBody DoctorRegistrationDTO doctorUpdatedDoctorInformation) throws DoctorUpdationException {
         return this.doctorService.updateDoctorAccountIntoApplication(Doctor.builder().name(doctorUpdatedDoctorInformation.getName())
                 .specialization(doctorUpdatedDoctorInformation.getSpecialization())
@@ -48,7 +48,7 @@ public class DoctorInformationController {
 
 
 
-    @DeleteMapping("delete/doctor")
+    @DeleteMapping("delete_account/doctor")
     public Doctor deleteDoctorAccountFromApplication(@RequestBody DoctorDeleteDto doctorDeleteDto) throws DoctorDeletionException {
         return this.doctorService.deleteDoctorAccountFromApplication(doctorDeleteDto.getEmail(),doctorDeleteDto.getPassword());
     }

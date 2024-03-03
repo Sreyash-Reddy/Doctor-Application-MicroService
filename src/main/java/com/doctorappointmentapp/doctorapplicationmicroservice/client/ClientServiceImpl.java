@@ -174,7 +174,6 @@ public class ClientServiceImpl implements ClientService{
         foundAppointment.setPaymentStatus(true);
         this.appointmentRepository.save(foundAppointment);
         return foundAppointment;
-
     }
 
     @Override

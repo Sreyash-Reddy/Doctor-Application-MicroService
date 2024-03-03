@@ -16,7 +16,7 @@ public class ClientInformationController {
     @Autowired
     private ClientService clientService;
 
-    @PostMapping("register/client")
+    @PostMapping("sign-up/client")
     public Client registerNewClientAccountIntoApplication(@RequestBody ClientRegistrationDTO clientRegistrationDetails) throws ClientRegistrationException {
         return this.clientService.registerNewClientAccountIntoApplication(Client.builder().name(clientRegistrationDetails.getName())
                 .email(clientRegistrationDetails.getEmail())
@@ -31,7 +31,7 @@ public class ClientInformationController {
         return this.clientService.loginClientAccountIntoApplication(clientLoginInformation.getEmail(),clientLoginInformation.getPassword());
     }
 
-    @PutMapping("update/client")
+    @PutMapping("update-account/client")
     public Client updateClientAccountIntoApplication(@RequestBody ClientRegistrationDTO clientUpdatedInformation) throws ClientUpdationException{
         return this.clientService.updateClientAccountIntoApplication(Client.builder().name(clientUpdatedInformation.getName())
                 .email(clientUpdatedInformation.getEmail())
@@ -41,7 +41,7 @@ public class ClientInformationController {
                 .build());
     }
 
-    @DeleteMapping("delete/client")
+    @DeleteMapping("delete_account/client")
     public Client deleteClientAccountFromApplication(@RequestBody ClientLoginDTO clientVerificationInformation) throws ClientDeletionException{
         return this.clientService.deleteClientAccountFromApplication(clientVerificationInformation.getEmail(),clientVerificationInformation.getPassword());
     }

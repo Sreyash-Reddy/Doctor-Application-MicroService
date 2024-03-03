@@ -38,7 +38,7 @@ public class ClientAppointmentController {
         return this.clientService.getAllAvailableDoctorsSortedBy(attribute);
     }
 
-    @PostMapping("client/book-appointment")
+    @PostMapping("client/new-appointment")
     public Appointment bookAppointmentInClientApplication(@RequestBody ClientBookAppointmentDTO clientBookAppointmentDTO) throws ClientAppointmentBookingException {
         Appointment appointment = Appointment.builder()
                 .appointmentDescription(clientBookAppointmentDTO.getAppointmentDescription())
@@ -57,17 +57,17 @@ public class ClientAppointmentController {
     }
 
 
-    @GetMapping("client/get-all-appointments/clientID={clientID}")
+    @GetMapping("client/all-appointments/clientID={clientID}")
     public List<Appointment> getAllAppointments(@PathVariable Integer clientID) throws ClientAppointmentsFetchingException {
         return this.clientService.getAllAppointments(clientID);
     }
 
-    @GetMapping("client/get-all-previous-appointments/clientID={clientID}-year={year}-month={month}-day={day}")
+    @GetMapping("client/previous-appointments/clientID={clientID}-year={year}-month={month}-day={day}")
     public List<Appointment> getAllPreviousAppointments(@PathVariable Integer clientID, @PathVariable Integer year, @PathVariable Integer month , @PathVariable Integer day) throws ClientAppointmentsFetchingException {
         return this.clientService.getAllPreviousAppointments(clientID,LocalDate.of(year,month,day));
     }
 
-    @GetMapping("client/get-all-future-appointments/clientID={clientID}-year={year}-month={month}-day={day}")
+    @GetMapping("client/future-appointments/clientID={clientID}-year={year}-month={month}-day={day}")
     public List<Appointment> getAllFutureAppointments(@PathVariable Integer clientID, @PathVariable Integer year, @PathVariable Integer month, @PathVariable Integer day) throws ClientAppointmentsFetchingException {
         return this.clientService.getAllFutureAppointments(clientID,LocalDate.of(year,month,day));
     }

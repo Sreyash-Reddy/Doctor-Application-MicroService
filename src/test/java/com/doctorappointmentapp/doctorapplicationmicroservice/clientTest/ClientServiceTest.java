@@ -25,19 +25,21 @@ public class ClientServiceTest {
     private DoctorService doctorService;
 
     private Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("123").build();
-    private Client externalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("externalTestClient@gmail.com").password("123").build();
+    private Client externalTestClient =Client.builder().name("External Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("externalTestClient@gmail.com").password("123").build();
 
     private Doctor internalTestDoctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc@gmail.com").password("123").build();
 
+    private Doctor externalTestDoctor = Doctor.builder().name("External Test Doctor").specialization("Neurologist").experience(3).email("externalTestdoc@gmail.com").password("123").build();
+
 
 //    private Appointment internalAppointment;
-//    private Client internalTestClientResponse;
-//    private Doctor internalTestDoctorResponse;
+//    private Client testClientResponse;
+//    private Doctor testDoctorResponse;
 //
 //    {
 //        try {
-//            internalTestClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient);
-//            internalTestDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor);
+//            testClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient);
+//            testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor);
 //        } catch (ClientRegistrationException | DoctorRegistrationException e) {
 //            throw new RuntimeException(e);
 //        }
@@ -50,16 +52,16 @@ public class ClientServiceTest {
         doctorService.deleteAllDoctors();
         clientService.deleteAllAppointments();
         try {
-            Client internalTestClientResponse=clientService.registerNewClientAccountIntoApplication(internalTestClient);
-            Doctor internalTestDoctorResponse=doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor);
+            Client testClientResponse=clientService.registerNewClientAccountIntoApplication(internalTestClient);
+            Doctor testDoctorResponse=doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor);
 //            internalAppointment = Appointment.builder()
 //                    .appointmentDescription("Test Appointment")
 //                    .paymentStatus(false)
 //                    .doctorConfirmationStatus(false)
 //                    .appointmentDate(LocalDate.of(2024,2,20))
 //                    .appointmentSlot(1)
-//                    .clientID(internalTestClientResponse.getId())
-//                    .doctorID(internalTestDoctorResponse.getId())
+//                    .clientID(testClientResponse.getId())
+//                    .doctorID(testDoctorResponse.getId())
 //                    .build();
 //            clientService.bookAppointmentInClientApplication(internalAppointment,LocalDate.of(2024,2,19));
         } catch (ClientRegistrationException | DoctorRegistrationException e) {
@@ -341,21 +343,19 @@ public class ClientServiceTest {
     @Test
     @Transactional
     void when_bookAppointmentInClientApplication_is_called_with_valid_inputData_return_Appointment_Object(){
-        Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient2@gmail.com").password("123").build();
-        Doctor internalTestDoctor =Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc2@gmail.com").password("123").build();
         try {
-            Client internalTestClientResponse;
-            Doctor internalTestDoctorResponse;
-            Assertions.assertNotNull(internalTestClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient));
-            Assertions.assertNotNull(internalTestDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor));
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
             Appointment appointment = Appointment.builder()
                     .appointmentDescription("Test Appointment")
                     .paymentStatus(false)
                     .doctorConfirmationStatus(false)
                     .appointmentDate(LocalDate.of(2024,2,20))
                     .appointmentSlot(1)
-                    .clientID(internalTestClientResponse.getId())
-                    .doctorID(internalTestDoctorResponse.getId())
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
                     .build();
             Assertions.assertNotNull(this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
         } catch (ClientAppointmentBookingException | ClientRegistrationException | DoctorRegistrationException e) {
@@ -367,10 +367,9 @@ public class ClientServiceTest {
 
     @Test
     void when_bookAppointmentInClientApplication_is_called_with_null_clientID_valid_inputData_throw_ClientAppointmentBookingException(){
-        Doctor internalTestDoctor =Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc3@gmail.com").password("123").build();
         try {
-            Doctor internalTestDoctorResponse;
-            Assertions.assertNotNull(internalTestDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor));
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
             Appointment appointment = Appointment.builder()
                     .appointmentDescription("Test Appointment")
                     .paymentStatus(false)
@@ -378,7 +377,7 @@ public class ClientServiceTest {
                     .appointmentDate(LocalDate.of(2024,2,20))
                     .appointmentSlot(1)
                     .clientID(null)
-                    .doctorID(internalTestDoctorResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
                     .build();
 
             Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
@@ -391,10 +390,9 @@ public class ClientServiceTest {
     @Test
     @Transactional
     void when_bookAppointmentInClientApplication_is_called_with_nonexisting_clientID_valid_inputData_throw_ClientAppointmentBookingException(){
-        Doctor internalTestDoctor =Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc4@gmail.com").password("123").build();
         try {
-            Doctor internalTestDoctorResponse;
-            Assertions.assertNotNull(internalTestDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor));
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
             Appointment appointment = Appointment.builder()
                     .appointmentDescription("Test Appointment")
                     .paymentStatus(false)
@@ -402,7 +400,7 @@ public class ClientServiceTest {
                     .appointmentDate(LocalDate.of(2024,2,20))
                     .appointmentSlot(1)
                     .clientID(-1)
-                    .doctorID(internalTestDoctorResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
                     .build();
 
             Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
@@ -415,17 +413,16 @@ public class ClientServiceTest {
     @Test
     @Transactional
     void when_bookAppointmentInClientApplication_is_called_with_null_doctorID_valid_inputData_throw_ClientAppointmentBookingException(){
-        Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient3@gmail.com").password("123").build();
         try {
-            Client internalTestClientResponse;
-            Assertions.assertNotNull(internalTestClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient));
+            Client testClientResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
             Appointment appointment = Appointment.builder()
                     .appointmentDescription("Test Appointment")
                     .paymentStatus(false)
                     .doctorConfirmationStatus(false)
                     .appointmentDate(LocalDate.of(2024,2,20))
                     .appointmentSlot(1)
-                    .clientID(internalTestClientResponse.getId())
+                    .clientID(testClientResponse.getId())
                     .doctorID(null)
                     .build();
 
@@ -439,17 +436,16 @@ public class ClientServiceTest {
     @Test
     @Transactional
     void when_bookAppointmentInClientApplication_is_called_with_nonExisting_doctorID_valid_inputData_throw_ClientAppointmentBookingException(){
-        Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient3@gmail.com").password("123").build();
         try {
-            Client internalTestClientResponse;
-            Assertions.assertNotNull(internalTestClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient));
+            Client testClientResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
             Appointment appointment = Appointment.builder()
                     .appointmentDescription("Test Appointment")
                     .paymentStatus(false)
                     .doctorConfirmationStatus(false)
                     .appointmentDate(LocalDate.of(2024,2,20))
                     .appointmentSlot(1)
-                    .clientID(internalTestClientResponse.getId())
+                    .clientID(testClientResponse.getId())
                     .doctorID(-1)
                     .build();
 
@@ -463,21 +459,19 @@ public class ClientServiceTest {
     @Test
     @Transactional
     void when_bookAppointmentInClientApplication_is_called_with_null_appointmentDescription_valid_inputData_throw_ClientAppointmentBookingException(){
-        Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient4@gmail.com").password("123").build();
-        Doctor internalTestDoctor =Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc4@gmail.com").password("123").build();
         try {
-            Client internalTestClientResponse;
-            Doctor internalTestDoctorResponse;
-            Assertions.assertNotNull(internalTestClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient));
-            Assertions.assertNotNull(internalTestDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor));
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
             Appointment appointment = Appointment.builder()
                     .appointmentDescription(null)
                     .paymentStatus(false)
                     .doctorConfirmationStatus(false)
                     .appointmentDate(LocalDate.of(2024,2,20))
                     .appointmentSlot(1)
-                    .clientID(internalTestClientResponse.getId())
-                    .doctorID(internalTestDoctorResponse.getId())
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
                     .build();
             Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
         } catch (ClientRegistrationException | DoctorRegistrationException e) {
@@ -488,21 +482,19 @@ public class ClientServiceTest {
     @Test
     @Transactional
     void when_bookAppointmentInClientApplication_is_called_with_null_paymentStatus_valid_inputData_throw_ClientAppointmentBookingException(){
-        Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient4@gmail.com").password("123").build();
-        Doctor internalTestDoctor =Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc4@gmail.com").password("123").build();
         try {
-            Client internalTestClientResponse;
-            Doctor internalTestDoctorResponse;
-            Assertions.assertNotNull(internalTestClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient));
-            Assertions.assertNotNull(internalTestDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor));
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
             Appointment appointment = Appointment.builder()
                     .appointmentDescription("Test")
                     .paymentStatus(null)
                     .doctorConfirmationStatus(false)
                     .appointmentDate(LocalDate.of(2024,2,20))
                     .appointmentSlot(1)
-                    .clientID(internalTestClientResponse.getId())
-                    .doctorID(internalTestDoctorResponse.getId())
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
                     .build();
             Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
         } catch (ClientRegistrationException | DoctorRegistrationException e) {
@@ -513,21 +505,19 @@ public class ClientServiceTest {
     @Test
     @Transactional
     void when_bookAppointmentInClientApplication_is_called_with_null_doctorConfirmationStatus_valid_inputData_throw_ClientAppointmentBookingException(){
-        Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient4@gmail.com").password("123").build();
-        Doctor internalTestDoctor =Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc4@gmail.com").password("123").build();
         try {
-            Client internalTestClientResponse;
-            Doctor internalTestDoctorResponse;
-            Assertions.assertNotNull(internalTestClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient));
-            Assertions.assertNotNull(internalTestDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor));
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
             Appointment appointment = Appointment.builder()
                     .appointmentDescription("Test")
                     .paymentStatus(false)
                     .doctorConfirmationStatus(null)
                     .appointmentDate(LocalDate.of(2024,2,20))
                     .appointmentSlot(1)
-                    .clientID(internalTestClientResponse.getId())
-                    .doctorID(internalTestDoctorResponse.getId())
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
                     .build();
             Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
         } catch (ClientRegistrationException | DoctorRegistrationException e) {
@@ -538,21 +528,19 @@ public class ClientServiceTest {
     @Test
     @Transactional
     void when_bookAppointmentInClientApplication_is_called_with_null_appointmentDate_valid_inputData_throw_ClientAppointmentBookingException(){
-        Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient4@gmail.com").password("123").build();
-        Doctor internalTestDoctor =Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc4@gmail.com").password("123").build();
         try {
-            Client internalTestClientResponse;
-            Doctor internalTestDoctorResponse;
-            Assertions.assertNotNull(internalTestClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient));
-            Assertions.assertNotNull(internalTestDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor));
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
             Appointment appointment = Appointment.builder()
                     .appointmentDescription("Test")
                     .paymentStatus(false)
                     .doctorConfirmationStatus(false)
                     .appointmentDate(null)
                     .appointmentSlot(1)
-                    .clientID(internalTestClientResponse.getId())
-                    .doctorID(internalTestDoctorResponse.getId())
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
                     .build();
             Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
         } catch (ClientRegistrationException | DoctorRegistrationException e) {
@@ -563,21 +551,19 @@ public class ClientServiceTest {
     @Test
     @Transactional
     void when_bookAppointmentInClientApplication_is_called_with_irregular_bookingDate_valid_inputData_throw_ClientAppointmentBookingException(){
-        Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient4@gmail.com").password("123").build();
-        Doctor internalTestDoctor =Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc4@gmail.com").password("123").build();
         try {
-            Client internalTestClientResponse;
-            Doctor internalTestDoctorResponse;
-            Assertions.assertNotNull(internalTestClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient));
-            Assertions.assertNotNull(internalTestDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor));
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
             Appointment appointment = Appointment.builder()
                     .appointmentDescription("Test")
                     .paymentStatus(false)
                     .doctorConfirmationStatus(false)
                     .appointmentDate(LocalDate.of(2024,2,15))
                     .appointmentSlot(1)
-                    .clientID(internalTestClientResponse.getId())
-                    .doctorID(internalTestDoctorResponse.getId())
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
                     .build();
             Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
         } catch (ClientRegistrationException | DoctorRegistrationException e) {
@@ -588,21 +574,19 @@ public class ClientServiceTest {
     @Test
     @Transactional
     void when_bookAppointmentInClientApplication_is_called_with_null_slotBooked_valid_inputData_throw_ClientAppointmentBookingException(){
-        Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient4@gmail.com").password("123").build();
-        Doctor internalTestDoctor =Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc4@gmail.com").password("123").build();
         try {
-            Client internalTestClientResponse;
-            Doctor internalTestDoctorResponse;
-            Assertions.assertNotNull(internalTestClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient));
-            Assertions.assertNotNull(internalTestDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor));
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
             Appointment appointment = Appointment.builder()
                     .appointmentDescription("Test")
                     .paymentStatus(false)
                     .doctorConfirmationStatus(false)
                     .appointmentDate(LocalDate.of(2024,2,20))
                     .appointmentSlot(null)
-                    .clientID(internalTestClientResponse.getId())
-                    .doctorID(internalTestDoctorResponse.getId())
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
                     .build();
             Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
         } catch (ClientRegistrationException | DoctorRegistrationException e) {
@@ -613,21 +597,19 @@ public class ClientServiceTest {
     @Test
     @Transactional
     void when_bookAppointmentInClientApplication_is_called_with_negative_slotBooked_valid_inputData_throw_ClientAppointmentBookingException(){
-        Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient4@gmail.com").password("123").build();
-        Doctor internalTestDoctor =Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc4@gmail.com").password("123").build();
         try {
-            Client internalTestClientResponse;
-            Doctor internalTestDoctorResponse;
-            Assertions.assertNotNull(internalTestClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient));
-            Assertions.assertNotNull(internalTestDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor));
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
             Appointment appointment = Appointment.builder()
                     .appointmentDescription("Test")
                     .paymentStatus(null)
                     .doctorConfirmationStatus(false)
                     .appointmentDate(LocalDate.of(2024,2,20))
                     .appointmentSlot(-1)
-                    .clientID(internalTestClientResponse.getId())
-                    .doctorID(internalTestDoctorResponse.getId())
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
                     .build();
             Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
         } catch (ClientRegistrationException | DoctorRegistrationException e) {
@@ -638,21 +620,19 @@ public class ClientServiceTest {
     @Test
     @Transactional
     void when_bookAppointmentInClientApplication_is_called_with_overLimit_slotBooked_valid_inputData_throw_ClientAppointmentBookingException(){
-        Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient4@gmail.com").password("123").build();
-        Doctor internalTestDoctor =Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc4@gmail.com").password("123").build();
         try {
-            Client internalTestClientResponse;
-            Doctor internalTestDoctorResponse;
-            Assertions.assertNotNull(internalTestClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient));
-            Assertions.assertNotNull(internalTestDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor));
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
             Appointment appointment = Appointment.builder()
                     .appointmentDescription("Test")
                     .paymentStatus(null)
                     .doctorConfirmationStatus(false)
                     .appointmentDate(LocalDate.of(2024,2,20))
                     .appointmentSlot(9)
-                    .clientID(internalTestClientResponse.getId())
-                    .doctorID(internalTestDoctorResponse.getId())
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
                     .build();
             Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
         } catch (ClientRegistrationException | DoctorRegistrationException e) {
