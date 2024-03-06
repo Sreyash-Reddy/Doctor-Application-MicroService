@@ -8,6 +8,7 @@ import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientLoginException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientRegistrationException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientUpdationException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class ClientInformationController {
     private ClientService clientService;
 
     @PostMapping("sign-up/client")
-    public Client registerNewClientAccountIntoApplication(@RequestBody ClientRegistrationDTO clientRegistrationDetails) throws ClientRegistrationException {
+    public Client registerNewClientAccountIntoApplication(@Valid @RequestBody ClientRegistrationDTO clientRegistrationDetails) throws ClientRegistrationException {
         return this.clientService.registerNewClientAccountIntoApplication(Client.builder().name(clientRegistrationDetails.getName())
                 .email(clientRegistrationDetails.getEmail())
                 .password(clientRegistrationDetails.getPassword())

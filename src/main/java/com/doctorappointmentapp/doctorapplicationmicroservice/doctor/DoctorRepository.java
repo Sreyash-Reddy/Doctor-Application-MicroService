@@ -12,10 +12,14 @@ import java.util.Optional;
 public interface DoctorRepository extends JpaRepository<Doctor,Integer> {
 
     Optional<Doctor> findByEmail(String email);
+
+    Optional<Doctor> findDoctorById(Integer Id);
     List<Doctor> findByIsActive(Boolean isActive);
     List<Doctor> findByNameAndIsActive(String doctorName,Boolean isActive);
 
     List<Doctor> findBySpecializationAndIsActive(String specialization, Boolean isActive);
+
+    List<Doctor> findAllBy();
     @Override
     void deleteAll();
 
