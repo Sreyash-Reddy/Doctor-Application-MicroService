@@ -38,16 +38,11 @@ public class Doctor {
 
     @Builder.Default
     @OneToMany
-    private List<Appointment> upcomingAppointmentList=new ArrayList<>() ;
-
-    @Builder.Default
-    @OneToMany//Remove it if we find a good solution
-    private List<Appointment> previousAppointmentList=new ArrayList<>();
+    private List<Appointment> appointmentList = new ArrayList<>();
 
     public Doctor() {
         this.isActive = true;
-        this.upcomingAppointmentList = new ArrayList<>();
-        this.previousAppointmentList = new ArrayList<>();
+        this.appointmentList = new ArrayList<>();
     }
 
 }

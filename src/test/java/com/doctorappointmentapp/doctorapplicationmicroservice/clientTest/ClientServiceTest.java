@@ -1,12 +1,14 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.clientTest;
 
 
+import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.Appointment;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.Client;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.ClientService;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientDeletionException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientLoginException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientRegistrationException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientUpdationException;
+import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.*;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.DoctorService;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorRegistrationException;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,16 +21,50 @@ public class ClientServiceTest {
     @Autowired
     private ClientService clientService;
 
+    @Autowired
+    private DoctorService doctorService;
+
     private Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("123").build();
-    private Client externalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("externalTestClient@gmail.com").password("123").build();
+    private Client externalTestClient =Client.builder().name("External Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("externalTestClient@gmail.com").password("123").build();
+
+    private Doctor internalTestDoctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc@gmail.com").password("123").build();
+
+    private Doctor externalTestDoctor = Doctor.builder().name("External Test Doctor").specialization("Neurologist").experience(3).email("externalTestdoc@gmail.com").password("123").build();
+
+
+//    private Appointment internalAppointment;
+//    private Client testClientResponse;
+//    private Doctor testDoctorResponse;
+//
+//    {
+//        try {
+//            testClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient);
+//            testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor);
+//        } catch (ClientRegistrationException | DoctorRegistrationException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 
     @BeforeEach
     void beforeEachTest(){
         clientService.deleteAllClients();
+        doctorService.deleteAllDoctors();
+        clientService.deleteAllAppointments();
         try {
-            clientService.registerNewClientAccountIntoApplication(internalTestClient);
-        } catch (ClientRegistrationException e) {
+            Client testClientResponse=clientService.registerNewClientAccountIntoApplication(internalTestClient);
+            Doctor testDoctorResponse=doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor);
+//            internalAppointment = Appointment.builder()
+//                    .appointmentDescription("Test Appointment")
+//                    .paymentStatus(false)
+//                    .doctorConfirmationStatus(false)
+//                    .appointmentDate(LocalDate.of(2024,2,20))
+//                    .appointmentSlot(1)
+//                    .clientID(testClientResponse.getId())
+//                    .doctorID(testDoctorResponse.getId())
+//                    .build();
+//            clientService.bookAppointmentInClientApplication(internalAppointment,LocalDate.of(2024,2,19));
+        } catch (ClientRegistrationException | DoctorRegistrationException e) {
             throw new RuntimeException(e);
         }
     }
@@ -243,18 +279,459 @@ public class ClientServiceTest {
     }
 
 
+    // TEST CASES FOR SEARCHING AVAILABLE DOCTORS FUNCTIONALITY
+    @Test
+    void when_getAvailableDoctors_is_called_return_list_of_available_doctors() {
+        Assertions.assertNotNull(this.clientService.getAvailableDoctors());
+    }
+    @Test
+    void when_getAvailableDoctorsByName_is_called_with_notNull_name_return_list_of_Doctors(){
+        try {
+            Assertions.assertNotNull(this.clientService.getAvailableDoctorsByName("doc"));
+        } catch (ClientDoctorSearchingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @Test
+    void when_getAvailableDoctorsByName_is_called_with_null_name_throw_ClientDoctorSearchingException(){
+        Assertions.assertThrows(ClientDoctorSearchingException.class,()->this.clientService.getAvailableDoctorsByName(null));
+    }
+    @Test
+    void when_getAvailableDoctorsByName_is_called_with_blank_name_throw_ClientDoctorSearchingException(){
+        Assertions.assertThrows(ClientDoctorSearchingException.class,()->this.clientService.getAvailableDoctorsByName(""));
+    }
+
+    //TEST CASES FOR DOCTOR SPECIALIZATIONS
+    @Test
+    void when_getAllAvailableDoctorsBySpecialization_is_called_with_valid_input_returns_list_of_doctors(){
+        try {
+            Assertions.assertNotNull(this.clientService.getAllAvailableDoctorsBySpecialization("Physician"));
+        } catch (ClientDoctorSearchingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void when_getAllAvailableDoctorsBySpecialization_is_called_with_null_specialization_throws_ClientDoctorSearchingException() {
+        Assertions.assertThrows(ClientDoctorSearchingException.class, ()->this.clientService.getAllAvailableDoctorsBySpecialization(null));
+    }
+
+    @Test
+    void when_getAllAvailableDoctorsBySpecialization_is_called_with_blank_specialization_throws_ClientDoctorSearchingException() {
+        Assertions.assertThrows(ClientDoctorSearchingException.class, ()->this.clientService.getAllAvailableDoctorsBySpecialization(""));
+    }
+
+    //DOCTOR SORTING TESTCASES BY ATTRIBUTE
+    @Test
+    void when_getAllAvailableDoctorsSortedBy_is_called_with_valid_attribute_return_sorted_list_of_doctors() {
+        try {
+            Assertions.assertNotNull(this.clientService.getAllAvailableDoctorsSortedBy("experience"));
+            Assertions.assertNotNull(this.clientService.getAllAvailableDoctorsSortedBy("consultancy-fee"));
+            Assertions.assertNotNull(this.clientService.getAllAvailableDoctorsSortedBy("name"));
+            Assertions.assertNotNull(this.clientService.getAllAvailableDoctorsSortedBy("specialization"));
+        } catch (ClientDoctorSearchingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void when_getAllAvailableDoctorsSortedBy_is_called_with_invalid_attribute_throws_ClientDoctorSearchingException() {
+        Assertions.assertThrows(ClientDoctorSearchingException.class, ()->this.clientService.getAllAvailableDoctorsSortedBy("wrong-attribute"));
+    }
+    //Client Appointment Functionality Test Cases
+
+    @Test
+    @Transactional
+    void when_bookAppointmentInClientApplication_is_called_with_valid_inputData_return_Appointment_Object(){
+        try {
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
+            Appointment appointment = Appointment.builder()
+                    .appointmentDescription("Test Appointment")
+                    .paymentStatus(false)
+                    .doctorConfirmationStatus(false)
+                    .appointmentDate(LocalDate.of(2024,2,20))
+                    .appointmentSlot(1)
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
+                    .build();
+            Assertions.assertNotNull(this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
+        } catch (ClientAppointmentBookingException | ClientRegistrationException | DoctorRegistrationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 
+    @Test
+    void when_bookAppointmentInClientApplication_is_called_with_null_clientID_valid_inputData_throw_ClientAppointmentBookingException(){
+        try {
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
+            Appointment appointment = Appointment.builder()
+                    .appointmentDescription("Test Appointment")
+                    .paymentStatus(false)
+                    .doctorConfirmationStatus(false)
+                    .appointmentDate(LocalDate.of(2024,2,20))
+                    .appointmentSlot(1)
+                    .clientID(null)
+                    .doctorID(testDoctorResponse.getId())
+                    .build();
 
+            Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
 
+        } catch ( DoctorRegistrationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    @Test
+    @Transactional
+    void when_bookAppointmentInClientApplication_is_called_with_nonexisting_clientID_valid_inputData_throw_ClientAppointmentBookingException(){
+        try {
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
+            Appointment appointment = Appointment.builder()
+                    .appointmentDescription("Test Appointment")
+                    .paymentStatus(false)
+                    .doctorConfirmationStatus(false)
+                    .appointmentDate(LocalDate.of(2024,2,20))
+                    .appointmentSlot(1)
+                    .clientID(-1)
+                    .doctorID(testDoctorResponse.getId())
+                    .build();
 
+            Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
 
+        } catch ( DoctorRegistrationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    @Test
+    @Transactional
+    void when_bookAppointmentInClientApplication_is_called_with_null_doctorID_valid_inputData_throw_ClientAppointmentBookingException(){
+        try {
+            Client testClientResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Appointment appointment = Appointment.builder()
+                    .appointmentDescription("Test Appointment")
+                    .paymentStatus(false)
+                    .doctorConfirmationStatus(false)
+                    .appointmentDate(LocalDate.of(2024,2,20))
+                    .appointmentSlot(1)
+                    .clientID(testClientResponse.getId())
+                    .doctorID(null)
+                    .build();
 
+            Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
 
+        } catch ( ClientRegistrationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    @Test
+    @Transactional
+    void when_bookAppointmentInClientApplication_is_called_with_nonExisting_doctorID_valid_inputData_throw_ClientAppointmentBookingException(){
+        try {
+            Client testClientResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Appointment appointment = Appointment.builder()
+                    .appointmentDescription("Test Appointment")
+                    .paymentStatus(false)
+                    .doctorConfirmationStatus(false)
+                    .appointmentDate(LocalDate.of(2024,2,20))
+                    .appointmentSlot(1)
+                    .clientID(testClientResponse.getId())
+                    .doctorID(-1)
+                    .build();
+
+            Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
+
+        } catch ( ClientRegistrationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    @Transactional
+    void when_bookAppointmentInClientApplication_is_called_with_null_appointmentDescription_valid_inputData_throw_ClientAppointmentBookingException(){
+        try {
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
+            Appointment appointment = Appointment.builder()
+                    .appointmentDescription(null)
+                    .paymentStatus(false)
+                    .doctorConfirmationStatus(false)
+                    .appointmentDate(LocalDate.of(2024,2,20))
+                    .appointmentSlot(1)
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
+                    .build();
+            Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
+        } catch (ClientRegistrationException | DoctorRegistrationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    @Transactional
+    void when_bookAppointmentInClientApplication_is_called_with_null_paymentStatus_valid_inputData_throw_ClientAppointmentBookingException(){
+        try {
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
+            Appointment appointment = Appointment.builder()
+                    .appointmentDescription("Test")
+                    .paymentStatus(null)
+                    .doctorConfirmationStatus(false)
+                    .appointmentDate(LocalDate.of(2024,2,20))
+                    .appointmentSlot(1)
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
+                    .build();
+            Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
+        } catch (ClientRegistrationException | DoctorRegistrationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    @Transactional
+    void when_bookAppointmentInClientApplication_is_called_with_null_doctorConfirmationStatus_valid_inputData_throw_ClientAppointmentBookingException(){
+        try {
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
+            Appointment appointment = Appointment.builder()
+                    .appointmentDescription("Test")
+                    .paymentStatus(false)
+                    .doctorConfirmationStatus(null)
+                    .appointmentDate(LocalDate.of(2024,2,20))
+                    .appointmentSlot(1)
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
+                    .build();
+            Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
+        } catch (ClientRegistrationException | DoctorRegistrationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    @Transactional
+    void when_bookAppointmentInClientApplication_is_called_with_null_appointmentDate_valid_inputData_throw_ClientAppointmentBookingException(){
+        try {
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
+            Appointment appointment = Appointment.builder()
+                    .appointmentDescription("Test")
+                    .paymentStatus(false)
+                    .doctorConfirmationStatus(false)
+                    .appointmentDate(null)
+                    .appointmentSlot(1)
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
+                    .build();
+            Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
+        } catch (ClientRegistrationException | DoctorRegistrationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    @Transactional
+    void when_bookAppointmentInClientApplication_is_called_with_irregular_bookingDate_valid_inputData_throw_ClientAppointmentBookingException(){
+        try {
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
+            Appointment appointment = Appointment.builder()
+                    .appointmentDescription("Test")
+                    .paymentStatus(false)
+                    .doctorConfirmationStatus(false)
+                    .appointmentDate(LocalDate.of(2024,2,15))
+                    .appointmentSlot(1)
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
+                    .build();
+            Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
+        } catch (ClientRegistrationException | DoctorRegistrationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    @Transactional
+    void when_bookAppointmentInClientApplication_is_called_with_null_slotBooked_valid_inputData_throw_ClientAppointmentBookingException(){
+        try {
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
+            Appointment appointment = Appointment.builder()
+                    .appointmentDescription("Test")
+                    .paymentStatus(false)
+                    .doctorConfirmationStatus(false)
+                    .appointmentDate(LocalDate.of(2024,2,20))
+                    .appointmentSlot(null)
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
+                    .build();
+            Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
+        } catch (ClientRegistrationException | DoctorRegistrationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    @Transactional
+    void when_bookAppointmentInClientApplication_is_called_with_negative_slotBooked_valid_inputData_throw_ClientAppointmentBookingException(){
+        try {
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
+            Appointment appointment = Appointment.builder()
+                    .appointmentDescription("Test")
+                    .paymentStatus(null)
+                    .doctorConfirmationStatus(false)
+                    .appointmentDate(LocalDate.of(2024,2,20))
+                    .appointmentSlot(-1)
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
+                    .build();
+            Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
+        } catch (ClientRegistrationException | DoctorRegistrationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    @Transactional
+    void when_bookAppointmentInClientApplication_is_called_with_overLimit_slotBooked_valid_inputData_throw_ClientAppointmentBookingException(){
+        try {
+            Client testClientResponse;
+            Doctor testDoctorResponse;
+            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
+            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
+            Appointment appointment = Appointment.builder()
+                    .appointmentDescription("Test")
+                    .paymentStatus(null)
+                    .doctorConfirmationStatus(false)
+                    .appointmentDate(LocalDate.of(2024,2,20))
+                    .appointmentSlot(9)
+                    .clientID(testClientResponse.getId())
+                    .doctorID(testDoctorResponse.getId())
+                    .build();
+            Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
+        } catch (ClientRegistrationException | DoctorRegistrationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    //TEST CASES FOR APPOINTMENT PAYMENTS
+//    @Test
+//    void when_makePaymentForAppointment_is_called_with_notnull_appointmentID_return_appointment_object(){
+//        try {
+//            Assertions.assertNotNull(this.clientService.makePaymentForAppointment(internalAppointment.getId()));
+//        } catch (ClientAppointmentPaymentException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+    @Test
+    void when_makePaymentForAppointment_is_called_with_null_appointmentID_throw_ClientAppointmentPaymentException() {
+        Assertions.assertThrows(ClientAppointmentPaymentException.class,()->this.clientService.makePaymentForAppointment(null));
+    }
+   @Test
+    void when_makePaymentForAppointment_is_called_with_notNull_nonExisting_appointmentID_throw_ClientAppointmentPaymentException() {
+        Assertions.assertThrows(ClientAppointmentPaymentException.class,()->this.clientService.makePaymentForAppointment(1234));
+    }
+//    @Test
+//    void when_makePaymentForAppointment_is_called_with_notNull_already_paid_appointmentID_throw_ClientAppointmentPaymentException() {
+//        try {
+//            Assertions.assertNotNull(this.clientService.makePaymentForAppointment(internalAppointment.getId()));
+//            Assertions.assertThrows(ClientAppointmentPaymentException.class,()->this.clientService.makePaymentForAppointment(internalAppointment.getId()));
+//        } catch (ClientAppointmentPaymentException e) {
+//            throw new RuntimeException(e);
+//        } }
+
+    //TEST CASES FOR GETTING APPOINTMENTS
+
+    @Test
+    void when_getAllAppointments_is_called_with_valid_input_return_the_List_of_Appointments(){
+        try {
+            Assertions.assertNotNull(this.clientService.getAllAppointments(internalTestClient.getId()));
+        } catch (ClientAppointmentsFetchingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void when_getAllAppointments_is_called_with_null_id_input_throw_ClientAppointmentsFetchingException(){
+        Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllAppointments(null));
+    }
+
+    @Test
+    void when_getAllAppointments_is_called_with_non_Existing_id_input_throw_ClientAppointmentsFetchingException(){
+        Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllAppointments(-1));
+    }
+
+    //TESTCASES FOR GETTING ALL PREVIOUS APPOINTMENTS
+    @Test
+    void when_getPreviousAppointments_is_called_with_valid_input_return_the_List_of_Appointments(){
+        try {
+            Assertions.assertNotNull(this.clientService.getAllPreviousAppointments(internalTestClient.getId(),LocalDate.of(2024,2,19)));
+        } catch (ClientAppointmentsFetchingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    void when_getPreviousAppointments_is_called_with_null_id_input_throw_ClientAppointmentsFetchingException(){
+        Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllPreviousAppointments(null,LocalDate.of(2024,2,19)));
+    }
+
+    @Test
+    void when_getPreviousAppointments_is_called_with_nonExisting_id_input_throw_ClientAppointmentsFetchingException(){
+        Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllPreviousAppointments(-1,LocalDate.of(2024,2,19)));
+    }
+
+    @Test
+    void when_getPreviousAppointments_is_called_with_null_date_input_throw_ClientAppointmentsFetchingException(){
+        Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllPreviousAppointments(internalTestClient.getId(),null));
+    }
+// TEST CASES FOR FUTURE APPOINTMENTS
+    @Test
+    void when_getFutureAppointments_is_called_with_valid_input_return_the_List_of_Appointments(){
+        try {
+            Assertions.assertNotNull(this.clientService.getAllPreviousAppointments(internalTestClient.getId(),LocalDate.of(2024,2,19)));
+        } catch (ClientAppointmentsFetchingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @Test
+    void when_getFutureAppointments_is_called_with_null_id_input_throw_ClientAppointmentsFetchingException(){
+        Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllPreviousAppointments(null,LocalDate.of(2024,2,19)));
+    }
+
+    @Test
+    void when_getFutureAppointments_is_called_with_nonExisting_id_input_throw_ClientAppointmentsFetchingException(){
+        Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllPreviousAppointments(-1,LocalDate.of(2024,2,19)));
+    }
+    @Test
+    void when_getFutureAppointments_is_called_with_null_date_input_throw_ClientAppointmentsFetchingException(){
+        Assertions.assertThrows(ClientAppointmentsFetchingException.class,()->this.clientService.getAllPreviousAppointments(internalTestClient.getId(),null));
+    }
 
 
 
