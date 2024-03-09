@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -23,16 +24,31 @@ public class Doctor {
     @GeneratedValue
     @Id
     private Integer id;
+
+    @NotNull
+    @NotBlank
+    @Pattern(regexp = "^[a-zA-Z]{5,12}$", message = "Name can only contain letters")
+    @Size(min=5,max=12,message="Length should be between 5-12 characters")
     private String name;
+
+    @NotNull
     private String specialization;
+
+    @Min(0)
+    @Max(100)
     private Integer experience;
+
+    @Pattern(regexp = "[1-9][0-9]{9}")
     private String mobileNumber;
+
+    @Min(0)
     private Double consultancyFee;
 
     @Builder.Default
     private Boolean isActive=true;
 
     //Authorization
+    @Email
     private String email;
     private String password;
 

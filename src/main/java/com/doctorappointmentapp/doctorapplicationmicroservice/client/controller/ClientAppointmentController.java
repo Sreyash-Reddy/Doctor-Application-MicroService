@@ -8,6 +8,7 @@ import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientL
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientRegistrationDTO;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.*;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,7 @@ public class ClientAppointmentController {
     }
 
     @PostMapping("client/new-appointment")
-    public Appointment bookAppointmentInClientApplication(@RequestBody ClientBookAppointmentDTO clientBookAppointmentDTO) throws ClientAppointmentBookingException {
+    public Appointment bookAppointmentInClientApplication(@Valid @RequestBody ClientBookAppointmentDTO clientBookAppointmentDTO) throws ClientAppointmentBookingException {
         Appointment appointment = Appointment.builder()
                 .appointmentDescription(clientBookAppointmentDTO.getAppointmentDescription())
                 .paymentStatus(false)

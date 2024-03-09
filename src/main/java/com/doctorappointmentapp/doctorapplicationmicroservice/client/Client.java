@@ -5,10 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 //import javax.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,20 +28,27 @@ public class Client {
     @Id
     private Integer id;
 
-    @NonNull
+    @NotNull
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z]{5,12}$", message = "Name can only contain letters")
     @Size(min=5,max=12,message="Length should be between 5-12 characters")
     private String name;
+
+    @Email
     private String email;
+
     private String password;
 
     //Personal Info
     private LocalDate dateOfBirth;
+
+    @Min(18)
+    @Max(120)
     private Integer age;
     //Not including Height and Weight
 
     //Contact Information
+    @Pattern(regexp = "[1-9][0-9]{9}")
     private String mobileNumber;
     //Not including Address
 
