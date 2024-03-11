@@ -1,4 +1,3 @@
-
 package com.doctorappointmentapp.doctorapplicationmicroservice.appointment;
 
 import jakarta.persistence.*;
