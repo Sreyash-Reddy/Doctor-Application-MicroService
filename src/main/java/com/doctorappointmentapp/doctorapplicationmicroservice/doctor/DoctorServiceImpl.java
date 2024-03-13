@@ -26,6 +26,7 @@ public class DoctorServiceImpl implements DoctorService{
         if (doctor.getSpecialization() == null) throw new DoctorRegistrationException("Doctor's Specialization Field Cannot Be Null, Please verify and Register Again");
         if (doctor.getExperience() == null) throw new DoctorRegistrationException("Doctor's Experience Field Cannot Be Null, Please verify and Register Again");
         if (doctor.getExperience() < 0) throw new DoctorRegistrationException("Doctor's Experience Field Cannot Be Negative, Please verify and Register Again");
+        if (doctor.getConsultancyFee() < 0) throw new DoctorRegistrationException("Doctor's Consultancy Fees Cannot Be Negative, Please verify and Register Again");
         if (doctor.getEmail() == null) throw new DoctorRegistrationException("Doctor's Email Field Cannot Be Null, Please verify and Register Again");
         Optional<Doctor> doctorOptional= this.doctorRepository.findByEmail(doctor.getEmail()) ;
         if (doctorOptional.isPresent()){
