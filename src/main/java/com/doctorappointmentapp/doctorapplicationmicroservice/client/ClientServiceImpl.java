@@ -149,13 +149,13 @@ public class ClientServiceImpl implements ClientService{
         if (appointment.getPaymentStatus() == null) throw new ClientAppointmentBookingException("Payment Status field cannot be null");
         if (appointment.getDoctorConfirmationStatus() == null) throw new ClientAppointmentBookingException("Doctor Confirmation field cannot be null, please retry again!");
         if (appointment.getAppointmentDate() == null) throw new ClientAppointmentBookingException("Appointment Date field cannot be null, please retry again!");
-        if (appointment.getAppointmentDate().isBefore(bookingDate)) throw new ClientAppointmentBookingException("Cannot book to previous date, Please book for future dates");
+//        if (appointment.getAppointmentDate().isBefore(bookingDate)) throw new ClientAppointmentBookingException("Cannot book to previous date, Please book for future dates");
         if (appointment.getAppointmentSlot() == null) throw new ClientAppointmentBookingException("Appointment Slot field cannot be null, please retry again!");
 
 
         // Try using number of slots as variable
-        if (appointment.getAppointmentSlot() > 4 && appointment.getAppointmentSlot() <= 0) throw new ClientAppointmentBookingException("Appointment Slots must be in range of 1 to "+4);
-        if (!this.appointmentRepository.findByDoctorIDAndAppointmentDateAndAndAppointmentSlot(appointment.getDoctorID(),appointment.getAppointmentDate(),appointment.getAppointmentSlot()).isEmpty()) throw new ClientAppointmentBookingException("Slot Already booked, please try booking another slot");
+        if (appointment.getAppointmentSlot() > 4 || appointment.getAppointmentSlot() <= 0) throw new ClientAppointmentBookingException("Appointment Slots must be in range of 1 to 4");
+        if (this.appointmentRepository.findByDoctorIDAndAppointmentDateAndAndAppointmentSlot(appointment.getDoctorID(),appointment.getAppointmentDate(),appointment.getAppointmentSlot()).isPresent()) throw new ClientAppointmentBookingException("Slot Already booked, please try booking another slot");
 
         this.clientRepository.getReferenceById(appointment.getClientID()).getAppointmentList().add(appointment);
         this.doctorRepository.getReferenceById(appointment.getDoctorID()).getAppointmentList().add(appointment);

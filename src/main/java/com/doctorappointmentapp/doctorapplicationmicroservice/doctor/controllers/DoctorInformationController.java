@@ -38,7 +38,7 @@ public class DoctorInformationController {
         return this.doctorService.loginDoctorAccountIntoApplication(doctorLoginInformation.getEmail(), doctorLoginInformation.getPassword());
     }
 
-    @PutMapping("update_account/doctor")
+    @PutMapping("update-account/doctor")
     public Doctor updateDoctorAccountIntoApplication(@Valid @RequestBody DoctorRegistrationDTO doctorUpdatedDoctorInformation) throws DoctorUpdationException {
         return this.doctorService.updateDoctorAccountIntoApplication(Doctor.builder().name(doctorUpdatedDoctorInformation.getName())
                 .specialization(doctorUpdatedDoctorInformation.getSpecialization())
@@ -52,7 +52,7 @@ public class DoctorInformationController {
 
 
 
-    @DeleteMapping("delete_account/doctor")
+    @DeleteMapping("delete-account/doctor")
     public Doctor deleteDoctorAccountFromApplication(@Valid @RequestBody DoctorDeleteDto doctorDeleteDto) throws DoctorDeletionException {
         return this.doctorService.deleteDoctorAccountFromApplication(doctorDeleteDto.getEmail(),doctorDeleteDto.getPassword());
     }

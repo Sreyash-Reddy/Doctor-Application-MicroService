@@ -43,7 +43,7 @@ public class ClientInformationController {
                 .build());
     }
 
-    @DeleteMapping("delete_account/client")
+    @DeleteMapping("delete-account/client")
     public Client deleteClientAccountFromApplication(@Valid @RequestBody ClientLoginDTO clientVerificationInformation) throws ClientDeletionException{
         return this.clientService.deleteClientAccountFromApplication(clientVerificationInformation.getEmail(),clientVerificationInformation.getPassword());
     }

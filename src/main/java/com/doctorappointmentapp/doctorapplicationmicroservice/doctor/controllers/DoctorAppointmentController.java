@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
+
 @RestController
 @CrossOrigin("http://localhost:4200/")
 public class DoctorAppointmentController {
