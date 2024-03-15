@@ -1,6 +1,9 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.adminTest;
 
+import com.doctorappointmentapp.doctorapplicationmicroservice.admin.Admin;
+import com.doctorappointmentapp.doctorapplicationmicroservice.admin.AdminRepository;
 import com.doctorappointmentapp.doctorapplicationmicroservice.admin.AdminService;
+import com.doctorappointmentapp.doctorapplicationmicroservice.admin.exceptions.AdminLoginException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.admin.exceptions.ClientDeactivationException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.admin.exceptions.DoctorDeactivationException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.Client;
@@ -11,16 +14,15 @@ import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.DoctorRepository;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.DoctorService;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorRegistrationException;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import javax.swing.event.CaretListener;
 import java.time.LocalDate;
-
+import java.util.Optional;
+@ActiveProfiles("test")
 @SpringBootTest
 public class AdminServiceTest {
 
@@ -39,21 +41,28 @@ public class AdminServiceTest {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private AdminRepository adminRepository;
+
     Integer DoctorId, ClientId;
 
     @BeforeEach
     void beforeEachTest(){
-        Doctor testDoctor = Doctor.builder().name("Test Doctor").specialization("Cardiologist").experience(5).email("testdoc@gmail.com").password("123").build();
+
+        this.doctorService.deleteAllDoctors();
+        this.clientService.deleteAllClients();
+        Doctor testDoctor = Doctor.builder().name("Test Doctor").specialization("Cardiologist").consultancyFee(500.0).experience(5).email("testdoc@gmail.com").password("123").mobileNumber("9988776655").build();
         Client testClient = Client.builder().name("Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("testclient@gmail.com").password("123").build();
 
         try {
             DoctorId = this.doctorService.registerNewDoctorAccountIntoApplication(testDoctor).getId();
             ClientId = this.clientService.registerNewClientAccountIntoApplication(testClient).getId();
+
+
         } catch (DoctorRegistrationException | ClientRegistrationException e) {
             throw new RuntimeException(e);
         }
     }
-
     //DOCTOR
 
     @DisplayName("Deactivate Doctor Using Null DoctorId")
@@ -150,6 +159,40 @@ public class AdminServiceTest {
         try {
             Assertions.assertEquals(false, this.adminService.deactivateClient(ClientId).getIsActive());
         } catch (ClientDeactivationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @DisplayName("Admin login using Null Email Id")
+    @Test
+    void when_login_admin_is_called_with_null_email_throws_AdminLoginException(){
+        Assertions.assertThrows(AdminLoginException.class,()-> this.adminService.loginAdminAccountIntoApplication(null, "acd"));
+    }
+
+    @DisplayName("Admin login using Null Password")
+    @Test
+    void when_login_admin_is_called_with_null_password_throws_AdminLoginException(){
+        Assertions.assertThrows(AdminLoginException.class,()-> this.adminService.loginAdminAccountIntoApplication("sa", null));
+    }
+
+    @DisplayName("Admin login using Invalid Email Id")
+    @Test
+    void when_login_admin_is_called_with_invalid_email_throws_AdminLoginException(){
+            Assertions.assertThrows(AdminLoginException.class,()->this.adminService.loginAdminAccountIntoApplication("admina@gmail.com", "aa"));
+    }
+
+    @DisplayName("Admin login using Invalid Password")
+    @Test
+    void when_login_admin_is_called_with_invalid_password_throws_AdminLoginException(){
+        Assertions.assertThrows(AdminLoginException.class,()->this.adminService.loginAdminAccountIntoApplication("admin@gmail.com", "aas"));
+    }
+
+    @DisplayName("Admin Login using Valid Credentials")
+    @Test
+    void when_login_admin_is_called_with_valid_credentials_success(){
+        try {
+            Assertions.assertEquals(this.adminRepository.findByEmail("admin@gmail.com").get().getEmail(), this.adminService.loginAdminAccountIntoApplication("admin@gmail.com", "aa").getEmail());
+        } catch (AdminLoginException e) {
             throw new RuntimeException(e);
         }
     }

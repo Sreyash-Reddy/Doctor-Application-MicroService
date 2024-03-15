@@ -72,4 +72,5 @@ public class AdminServiceImpl implements AdminService{
             if (!adminDetails.get().getPassword().equals(password)) throw new AdminLoginException("Incorrect password! Please retry login!");
             return adminDetails.get();
     }
+
 }

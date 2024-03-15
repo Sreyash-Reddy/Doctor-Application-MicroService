@@ -1,6 +1,8 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.appointment;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +26,8 @@ public class Appointment {
     private Boolean doctorConfirmationStatus;
 
     private LocalDate appointmentDate;
+    @Min(1)
+    @Max(4)
     private Integer appointmentSlot;
 
     private Integer clientID;

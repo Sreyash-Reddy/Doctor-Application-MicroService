@@ -16,8 +16,8 @@ public class DoctorServiceTest {
 
     @Autowired
     private DoctorService doctorService;
-    private Doctor internalTestDoctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc@gmail.com").password("123").build();
-    private Doctor externalTestDoctor = Doctor.builder().name("External Test Doctor").specialization("Neurologist").experience(3).email("externalTestdoc@gmail.com").password("123").build();
+    private Doctor internalTestDoctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).consultancyFee(500.0).mobileNumber("9988776655").email("internalTestdoc@gmail.com").password("123").build();
+    private Doctor externalTestDoctor = Doctor.builder().name("External Test Doctor").specialization("Neurologist").experience(3).consultancyFee(500.0).mobileNumber("9988776655").email("externalTestdoc@gmail.com").password("123").build();
 
 
     @BeforeEach
@@ -87,7 +87,7 @@ public class DoctorServiceTest {
     @DisplayName("Register Doctor Using Null Email")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_Null_email_notNull_password_throw_DoctorRegistrationException() {
-        Doctor doctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email(null).password("123").build();
+        Doctor doctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).consultancyFee(500.0).mobileNumber("9988776655").email(null).password("123").build();
         Assertions.assertThrows(DoctorRegistrationException.class, () -> this.doctorService.registerNewDoctorAccountIntoApplication(doctor));
     }
 
@@ -101,7 +101,7 @@ public class DoctorServiceTest {
     @DisplayName("Register Doctor Using Null Password")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_notNull_email_Null_password_throw_DoctorRegistrationException() {
-        Doctor doctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc@gmail.com").password(null).build();
+        Doctor doctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").consultancyFee(500.0).mobileNumber("9988776655").experience(3).email("internalTestdoc@gmail.com").password(null).build();
         Assertions.assertThrows(DoctorRegistrationException.class, () -> this.doctorService.registerNewDoctorAccountIntoApplication(doctor));
     }
 
