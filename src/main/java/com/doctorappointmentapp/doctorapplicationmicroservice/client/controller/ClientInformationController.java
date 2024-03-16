@@ -10,6 +10,7 @@ import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientUpdationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 //@CrossOrigin("http://localhost:4200")
 @CrossOrigin("http://localhost:4200/")

@@ -23,6 +23,7 @@ public class ClientBookAppointmentDTO {
     private String appointmentDescription;
 
     private LocalDate appointmentDate;
+
     @Min(1)
     @Max(4)
     private Integer appointmentSlot;

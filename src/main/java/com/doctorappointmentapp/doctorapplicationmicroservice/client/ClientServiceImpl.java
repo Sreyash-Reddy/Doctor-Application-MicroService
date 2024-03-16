@@ -40,7 +40,7 @@ public class ClientServiceImpl implements ClientService{
 
         client.getAge();
 
-        if(client.getAge()<18) throw new ClientRegistrationException("Clients Age Should Be At Least 18 years");
+        if(client.getAge()<18) throw new ClientRegistrationException("Client's Age Should Be At Least 18 years");
         if (client.getEmail() == null) throw new ClientRegistrationException("Client's Email Field Cannot Be Null, Please verify and Register Again");
         Optional<Client> clientOptional= this.clientRepository.findByEmail(client.getEmail()) ;
         if (clientOptional.isPresent()){

@@ -51,8 +51,8 @@ public class AdminServiceTest {
 
         this.doctorService.deleteAllDoctors();
         this.clientService.deleteAllClients();
-        Doctor testDoctor = Doctor.builder().name("Test Doctor").specialization("Cardiologist").consultancyFee(500.0).experience(5).email("testdoc@gmail.com").password("123").mobileNumber("9988776655").build();
-        Client testClient = Client.builder().name("Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("testclient@gmail.com").password("123").build();
+        Doctor testDoctor = Doctor.builder().name("Test Doctor").specialization("Cardiologist").consultancyFee(500.0).experience(5).email("testdoc@gmail.com").password("Aa@1Aa@1").mobileNumber("9988776655").build();
+        Client testClient = Client.builder().name("Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("testclient@gmail.com").password("Aa@1Aa@1").build();
 
         try {
             DoctorId = this.doctorService.registerNewDoctorAccountIntoApplication(testDoctor).getId();

@@ -16,6 +16,7 @@ import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.DoctorService;
 import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

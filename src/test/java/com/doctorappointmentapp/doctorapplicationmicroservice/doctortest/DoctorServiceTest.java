@@ -16,8 +16,8 @@ public class DoctorServiceTest {
 
     @Autowired
     private DoctorService doctorService;
-    private Doctor internalTestDoctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).consultancyFee(500.0).mobileNumber("9988776655").email("internalTestdoc@gmail.com").password("123").build();
-    private Doctor externalTestDoctor = Doctor.builder().name("External Test Doctor").specialization("Neurologist").experience(3).consultancyFee(500.0).mobileNumber("9988776655").email("externalTestdoc@gmail.com").password("123").build();
+    private Doctor internalTestDoctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).consultancyFee(500.0).mobileNumber("9988776655").email("internalTestdoc@gmail.com").password("Aa@1Aa@1").build();
+    private Doctor externalTestDoctor = Doctor.builder().name("External Test Doctor").specialization("Neurologist").experience(3).consultancyFee(500.0).mobileNumber("9988776655").email("externalTestdoc@gmail.com").password("Aa@1Aa@1").build();
 
 
     @BeforeEach
@@ -54,7 +54,7 @@ public class DoctorServiceTest {
     @DisplayName("Register Doctor Using Null Name")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_Null_name_notNull_specialization_notNull_positive_Experience_throw_DoctorRegistrationException() {
-        Doctor doctor = Doctor.builder().name(null).specialization("Neurologist").experience(3).email("internalTestdoc@gmail.com").password("123").build();
+        Doctor doctor = Doctor.builder().name(null).specialization("Neurologist").experience(3).email("internalTestdoc@gmail.com").password("Aa@1Aa@1").build();
 
         Assertions.assertThrows(DoctorRegistrationException.class, () -> this.doctorService.registerNewDoctorAccountIntoApplication(doctor));
     }
@@ -63,7 +63,7 @@ public class DoctorServiceTest {
     @DisplayName("Register Doctor Using Null Specialization")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_notNull_name_Null_specialization_notNull_positive_Experience_throw_DoctorRegistrationException() {
-        Doctor doctor = Doctor.builder().name("Internal Test Doctor").specialization(null).experience(3).email("internalTestdoc@gmail.com").password("123").build();
+        Doctor doctor = Doctor.builder().name("Internal Test Doctor").specialization(null).experience(3).email("internalTestdoc@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(DoctorRegistrationException.class, () -> this.doctorService.registerNewDoctorAccountIntoApplication(doctor));
     }
 
@@ -71,7 +71,7 @@ public class DoctorServiceTest {
     @DisplayName("Register Doctor Using Null Experience")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_notNull_name_notNull_specialization_Null_Experience_throw_DoctorRegistrationException() {
-        Doctor doctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(null).email("internalTestdoc@gmail.com").password("123").build();
+        Doctor doctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(null).email("internalTestdoc@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(DoctorRegistrationException.class, () -> this.doctorService.registerNewDoctorAccountIntoApplication(doctor));
     }
 
@@ -79,7 +79,7 @@ public class DoctorServiceTest {
     @DisplayName("Register Doctor Using Negative Experience")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_notNull_name_notNull_specialization_notNull_negative_Experience_throw_DoctorRegistrationException() {
-        Doctor doctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(-3).email("internalTestdoc@gmail.com").password("123").build();
+        Doctor doctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(-3).email("internalTestdoc@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(DoctorRegistrationException.class, () -> this.doctorService.registerNewDoctorAccountIntoApplication(doctor));
     }
 
@@ -87,7 +87,7 @@ public class DoctorServiceTest {
     @DisplayName("Register Doctor Using Null Email")
     @Test
     void when_registerNewDoctorAccountIntoApplication_is_called_with_Null_email_notNull_password_throw_DoctorRegistrationException() {
-        Doctor doctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).consultancyFee(500.0).mobileNumber("9988776655").email(null).password("123").build();
+        Doctor doctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).consultancyFee(500.0).mobileNumber("9988776655").email(null).password("Aa@1Aa@1").build();
         Assertions.assertThrows(DoctorRegistrationException.class, () -> this.doctorService.registerNewDoctorAccountIntoApplication(doctor));
     }
 
@@ -122,7 +122,7 @@ public class DoctorServiceTest {
     @DisplayName("Doctor Login Using Null Email")
     @Test
     void when_loginNewDoctorAccountIntoApplication_is_called_with_Null_email_notNull_password_throw_DoctorLoginException() {
-        Assertions.assertThrows(DoctorLoginException.class, () -> this.doctorService.loginDoctorAccountIntoApplication(null, "123"));
+        Assertions.assertThrows(DoctorLoginException.class, () -> this.doctorService.loginDoctorAccountIntoApplication(null, "Aa@1Aa@1"));
     }
 
 
@@ -136,7 +136,7 @@ public class DoctorServiceTest {
     @DisplayName("Doctor Login Using Non-Existing Email")
     @Test
     void when_loginNewDoctorAccountIntoApplication_is_called_with_notNull_nonExisting_email_notNull_password_throw_DoctorLoginException() {
-        Assertions.assertThrows(DoctorLoginException.class, () -> this.doctorService.loginDoctorAccountIntoApplication("nonExisting@gmail.com", "123"));
+        Assertions.assertThrows(DoctorLoginException.class, () -> this.doctorService.loginDoctorAccountIntoApplication("nonExisting@gmail.com", "Aa@1Aa@1"));
     }
 
 
@@ -152,7 +152,7 @@ public class DoctorServiceTest {
     @DisplayName("Updating Doctor Giving All Details")
     @Test
     void when_updateDoctorAccountIntoApplication_is_called_with_notNull_name_notNull_specialization_notNull_positive_Experience_return_object() {
-        Doctor updatedDoctor = Doctor.builder().name("Internal Test Doctor Updated").specialization("Neurologist").experience(3).email("internalTestdoc@gmail.com").password("123").build();
+        Doctor updatedDoctor = Doctor.builder().name("Doctor Updated").specialization("Neurologist").experience(3).email("internalTestdoc@gmail.com").password("Aa@1Aa@1").build();
         try {
             Assertions.assertNotNull(this.doctorService.updateDoctorAccountIntoApplication(updatedDoctor));
         } catch (DoctorUpdationException e) {
@@ -164,7 +164,7 @@ public class DoctorServiceTest {
     @DisplayName("Updating Doctor Using Non-Existing Email")
     @Test
     void when_updateDoctorAccountIntoApplication_is_called_with_notNull_nonExisting_email_throw_DoctorUpdationException() {
-        Doctor updatedDoctor = Doctor.builder().name("Updated Test Doctor").specialization("Pulmonologist").experience(3).email("nonExisting@gmail.com").password("123").build();
+        Doctor updatedDoctor = Doctor.builder().name("Updated Test Doctor").specialization("Pulmonologist").experience(3).email("nonExisting@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(DoctorUpdationException.class, () -> this.doctorService.updateDoctorAccountIntoApplication(updatedDoctor));
     }
 
@@ -179,7 +179,7 @@ public class DoctorServiceTest {
     @DisplayName("Updating Doctor Using Null Name")
     @Test
     void when_updateDoctorAccountIntoApplication_is_called_with_Null_name_notNull_specialization_notNull_positive_Experience_throw_DoctorUpdationException() {
-        Doctor updatedDoctor = Doctor.builder().name(null).specialization("Neurologist").experience(3).email("internalTestdoc@gmail.com").password("123").build();
+        Doctor updatedDoctor = Doctor.builder().name(null).specialization("Neurologist").experience(3).email("internalTestdoc@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(DoctorUpdationException.class, () -> this.doctorService.updateDoctorAccountIntoApplication(updatedDoctor));
     }
 
@@ -187,7 +187,7 @@ public class DoctorServiceTest {
     @DisplayName("Updating Doctor Using Null Specialization")
     @Test
     void when_updateDoctorAccountIntoApplication_is_called_with_notNull_name_Null_specialization_notNull_positive_Experience_throw_DoctorUpdationException() {
-        Doctor updatedDoctor = Doctor.builder().name("Internal Test Doctor").specialization(null).experience(3).email("internalTestdoc@gmail.com").password("123").build();
+        Doctor updatedDoctor = Doctor.builder().name("Internal Test Doctor").specialization(null).experience(3).email("internalTestdoc@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(DoctorUpdationException.class, () -> this.doctorService.updateDoctorAccountIntoApplication(updatedDoctor));
     }
 
@@ -195,7 +195,7 @@ public class DoctorServiceTest {
     @DisplayName("Updating Doctor Using Null Experience")
     @Test
     void when_updateDoctorAccountIntoApplication_is_called_with_notNull_name_notNull_specialization_Null_positive_Experience_throw_DoctorUpdateException() {
-        Doctor updatedDoctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(null).email("internalTestdoc@gmail.com").password("123").build();
+        Doctor updatedDoctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(null).email("internalTestdoc@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(DoctorUpdationException.class, () -> this.doctorService.updateDoctorAccountIntoApplication(updatedDoctor));
     }
 
@@ -203,7 +203,7 @@ public class DoctorServiceTest {
     @DisplayName("Updating Doctor Using Negative Experience")
     @Test
     void when_updateDoctorAccountIntoApplication_is_called_with_notNull_name_notNull_specialization_notNull_negative_Experience_throw_DoctorUpdateException() {
-        Doctor updatedDoctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(-3).email("internalTestdoc@gmail.com").password("123").build();
+        Doctor updatedDoctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(-3).email("internalTestdoc@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(DoctorUpdationException.class, () -> this.doctorService.updateDoctorAccountIntoApplication(updatedDoctor));
     }
 
