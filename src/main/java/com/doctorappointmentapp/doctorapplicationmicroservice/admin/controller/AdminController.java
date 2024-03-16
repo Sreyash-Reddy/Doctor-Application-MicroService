@@ -1,11 +1,14 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.admin.controller;
 
 import com.doctorappointmentapp.doctorapplicationmicroservice.admin.Admin;
+import com.doctorappointmentapp.doctorapplicationmicroservice.admin.AdminRepository;
 import com.doctorappointmentapp.doctorapplicationmicroservice.admin.AdminService;
 import com.doctorappointmentapp.doctorapplicationmicroservice.admin.dto.AdminLoginDto;
 import com.doctorappointmentapp.doctorapplicationmicroservice.admin.exceptions.AdminLoginException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.admin.exceptions.ClientDeactivationException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.admin.exceptions.DoctorDeactivationException;
+import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.Appointment;
+import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.AppointmentRepository;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.Client;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.ClientService;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientLoginDTO;
@@ -54,6 +57,11 @@ public class AdminController {
     @PostMapping("login/admin")
     public Admin loginAdminAccountIntoApplication(@Valid @RequestBody AdminLoginDto adminLoginInformation) throws AdminLoginException {
         return this.adminService.loginAdminAccountIntoApplication(adminLoginInformation.getEmail(), adminLoginInformation.getPassword());
+    }
+
+    @GetMapping("appointments")
+    public List<Appointment> getAllAppointments(){
+        return this.adminService.getAllAppointments();
     }
 
 }

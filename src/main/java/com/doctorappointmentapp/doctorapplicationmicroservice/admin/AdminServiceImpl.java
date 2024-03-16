@@ -4,6 +4,8 @@ package com.doctorappointmentapp.doctorapplicationmicroservice.admin;
 import com.doctorappointmentapp.doctorapplicationmicroservice.admin.exceptions.AdminLoginException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.admin.exceptions.ClientDeactivationException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.admin.exceptions.DoctorDeactivationException;
+import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.Appointment;
+import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.AppointmentRepository;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.Client;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.ClientRepository;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientLoginException;
@@ -27,6 +29,9 @@ public class AdminServiceImpl implements AdminService{
     @Autowired
     AdminRepository adminRepository;
 
+    @Autowired
+    AppointmentRepository appointmentRepository;
+
     @Override
     public List<Doctor> getAllDoctors() {
         return this.doctorRepository.findAll();
@@ -48,6 +53,11 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public List<Client> getALlClients() {
         return this.clientRepository.findAll();
+    }
+
+    @Override
+    public List<Appointment> getAllAppointments() {
+        return this.appointmentRepository.findAll();
     }
 
     @Override
