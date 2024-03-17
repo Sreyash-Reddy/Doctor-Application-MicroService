@@ -10,4 +10,8 @@ class DoctorTest {
 	void contextLoads() {
 	}
 
+	@Test
+	void contextLoad() {
+	}
+
 }

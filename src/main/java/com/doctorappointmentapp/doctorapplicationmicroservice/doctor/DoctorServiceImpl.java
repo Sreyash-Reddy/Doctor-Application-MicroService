@@ -35,9 +35,6 @@ public class DoctorServiceImpl implements DoctorService{
             else throw new DoctorRegistrationException("Account With Given Email Has Been Deactivated, Please Contact The Admin");
         }
         if (doctor.getPassword() == null) throw new DoctorRegistrationException("Doctor's Password Field Cannot Be Null, Please verify and Register Again");
-//        doctor.setIsActive(true);
-//        doctor.setPreviousAppointmentList(new ArrayList<>());
-//        doctor.setUpcomingAppointmentList(new ArrayList<>());
         return this.doctorRepository.save(doctor);
     }
 

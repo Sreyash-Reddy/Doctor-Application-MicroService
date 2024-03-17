@@ -147,7 +147,7 @@ public class AdminServiceTest {
         Assertions.assertThrows(ClientDeactivationException.class, ()->this.adminService.deactivateClient(1000));
     }
 
-    @DisplayName("Deactivate Client Before Deactivation Cient is Active")
+    @DisplayName("Deactivate Client Before Deactivation Client is Active")
     @Test
     void when_deactivateClient_is_called_but_before_setIsActive_returns_true(){
         Assertions.assertEquals(true, this.clientRepository.findClientById(ClientId).get().getIsActive());

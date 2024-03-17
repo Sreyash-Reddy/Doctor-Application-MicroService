@@ -28,9 +28,6 @@ public class ClientServiceImpl implements ClientService{
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-//    @Value("$numberOfSlots")
-//    private String numberOfSlots;
-
     @Override
     public Client registerNewClientAccountIntoApplication(Client client) throws ClientRegistrationException {
         if (client == null) throw new ClientRegistrationException("Null Data Received, Please verify and Register Again");
