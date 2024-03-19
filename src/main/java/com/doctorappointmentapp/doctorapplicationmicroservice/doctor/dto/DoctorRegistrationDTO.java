@@ -22,7 +22,7 @@ public class DoctorRegistrationDTO {
     @Max(100)
     private Integer experience;
 
-    @Pattern(regexp = "[1-9][0-9]{9}",message = "Enter a 10 digit mobile number")
+    @Pattern(regexp = "^[1-9][0-9]{9}$",message = "Enter a 10 digit mobile number")
     private String mobileNumber;
 
     @Min(0)
