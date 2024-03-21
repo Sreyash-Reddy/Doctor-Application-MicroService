@@ -1,9 +1,6 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.client.controller;
 
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientDeletionException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientLoginException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientRegistrationException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientUpdationException;
+import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -36,6 +33,11 @@ public class ClientInformationControllerAdvice {
     @ExceptionHandler(value={ClientDeletionException.class})
     public ResponseEntity<String> clientDeletionExceptionHandler(ClientDeletionException clientDeletionException){
         return new ResponseEntity<>(clientDeletionException.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value={ClientFetchingException.class})
+    public ResponseEntity<String> clientFetchingExceptionHandler(ClientFetchingException clientFetchingException){
+        return new ResponseEntity<>(clientFetchingException.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -7,6 +7,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface DoctorService {
+
+
+    Doctor getDoctorById(Integer doctorId) throws DoctorFetchingException;
     Doctor registerNewDoctorAccountIntoApplication(Doctor doctor) throws DoctorRegistrationException;
 
     Doctor loginDoctorAccountIntoApplication(String email, String password) throws DoctorLoginException;
@@ -24,6 +27,7 @@ public interface DoctorService {
     List<Appointment> getAllPreviousAppointments(Integer doctorID, LocalDate currentDate) throws DoctorAppointmentsFetchingException;
 
     List <Appointment> getAllFutureAppointments(Integer id, LocalDate of) throws DoctorAppointmentsFetchingException;
+
 
 
 }

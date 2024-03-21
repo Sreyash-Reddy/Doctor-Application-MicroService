@@ -5,20 +5,23 @@ import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.DoctorServi
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.dto.DoctorDeleteDto;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.dto.DoctorLoginDTO;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.dto.DoctorRegistrationDTO;
-import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorDeletionException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorLoginException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorRegistrationException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.DoctorUpdationException;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.exceptions.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"})
 //@CrossOrigin(origins = "http://localhost:4200") // Allow this origin
 public class DoctorInformationController {
     @Autowired
     private DoctorService doctorService;
+
+
+    @GetMapping("doctor/{id}")
+    public Doctor getDoctorById(@RequestBody Integer doctorId) throws DoctorFetchingException {
+        return this.doctorService.getDoctorById(doctorId);
+    }
 
     @PostMapping("sign-up/doctor")
     public Doctor registerNewDoctorAccountIntoApplication(@Valid @RequestBody DoctorRegistrationDTO newDoctorInputInformation) throws DoctorRegistrationException {

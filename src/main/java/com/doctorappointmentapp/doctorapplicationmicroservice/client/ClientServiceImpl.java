@@ -104,6 +104,15 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
+    public Client getClientById(Integer clientId) throws ClientFetchingException {
+        if (clientId == null) throw new ClientFetchingException("Client Id cannot be null, please try again");
+        Optional<Client> clientDetails = this.clientRepository.findById(clientId);
+        if (clientDetails.isEmpty()) throw new ClientFetchingException("Client with given Id does not exist, Please try again");
+        Client foundClient=clientDetails.get();
+        return foundClient;
+    }
+
+    @Override
     public void deleteAllClients() {
         this.clientRepository.deleteAll();
     }

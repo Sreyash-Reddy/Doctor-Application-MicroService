@@ -17,6 +17,7 @@ public interface ClientService {
 
     Client deleteClientAccountFromApplication(String email, String password) throws ClientDeletionException;
 
+    Client getClientById(Integer clientId) throws ClientFetchingException;
     void deleteAllClients();
     List<Doctor> getAvailableDoctors();
     List<Doctor> getAvailableDoctorsByName(String doctorName) throws ClientDoctorSearchingException;

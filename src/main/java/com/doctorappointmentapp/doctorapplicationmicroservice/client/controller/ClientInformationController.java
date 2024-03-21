@@ -4,20 +4,24 @@ import com.doctorappointmentapp.doctorapplicationmicroservice.client.Client;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.ClientService;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientLoginDTO;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientRegistrationDTO;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientDeletionException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientLoginException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientRegistrationException;
-import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientUpdationException;
+import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 //@CrossOrigin("http://localhost:4200")
-@CrossOrigin("http://localhost:4200/")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"})
 @RestController
 public class ClientInformationController {
     @Autowired
     private ClientService clientService;
+
+
+
+    @GetMapping("client/{id}")
+    public Client getClientById(@RequestBody Integer clientId) throws ClientFetchingException{
+        return this.clientService.getClientById(clientId);
+    }
 
     @PostMapping("sign-up/client")
     public Client registerNewClientAccountIntoApplication(@Valid @RequestBody ClientRegistrationDTO clientRegistrationDetails) throws ClientRegistrationException {

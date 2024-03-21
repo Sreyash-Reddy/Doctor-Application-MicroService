@@ -19,6 +19,16 @@ public class DoctorServiceImpl implements DoctorService{
 
     @Autowired
     private AppointmentRepository appointmentRepository;
+
+    @Override
+    public Doctor getDoctorById(Integer doctorId) throws DoctorFetchingException {
+        if(doctorId==null) throw new DoctorFetchingException("Doctor Id cannot be null, please try again");
+        Optional<Doctor> doctorDetails = this.doctorRepository.findById(doctorId);
+        if (doctorDetails.isEmpty()) throw new DoctorFetchingException("Doctor with a given Id does not exist, lease try again");
+        Doctor foundDoctor=doctorDetails.get();
+        return foundDoctor;
+    }
+
     @Override
     public Doctor registerNewDoctorAccountIntoApplication(Doctor doctor) throws DoctorRegistrationException {
         if (doctor == null) throw new DoctorRegistrationException("Null Data Received, Please verify and Register Again");
