@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
+import javax.print.Doc;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -148,15 +149,25 @@ public class ClientServiceImpl implements ClientService{
     public Appointment bookAppointmentInClientApplication(Appointment appointment , LocalDate bookingDate) throws ClientAppointmentBookingException {
 
         if (appointment.getClientID() == null) throw new ClientAppointmentBookingException("Client ID field cannot be null, Please try again!");
-        if (this.clientRepository.findById(appointment.getClientID()).isEmpty()) throw new ClientAppointmentBookingException("Client ID not found in database, please retry again");
+        Optional<Client> clientOptional=this.clientRepository.findById(appointment.getClientID());
+        if (clientOptional.isEmpty()) throw new ClientAppointmentBookingException("Client ID not found in database, please retry again");
+//        Client foundClient=clientOptional.get();
+       // appointment.setClient(foundClient);
+//
+
         if (appointment.getDoctorID() == null) throw new ClientAppointmentBookingException("Doctor ID field cannot be null, Please try again!");
-        if (this.doctorRepository.findById(appointment.getDoctorID()).isEmpty()) throw new ClientAppointmentBookingException("Doctor ID not found in database, please retry again");
+        Optional<Doctor> doctorOptional=this.doctorRepository.findDoctorById(appointment.getDoctorID());
+        if (doctorOptional.isEmpty()) throw new ClientAppointmentBookingException("Doctor ID not found in database, please retry again");
+//        Doctor foundDoctor=doctorOptional.get();
+        //appointment.setDoctor(foundDoctor);
+
         if (appointment.getAppointmentDescription() == null) throw new ClientAppointmentBookingException("Appoint description cannot be null, please try again!");
         if (appointment.getPaymentStatus() == null) throw new ClientAppointmentBookingException("Payment Status field cannot be null");
         if (appointment.getDoctorConfirmationStatus() == null) throw new ClientAppointmentBookingException("Doctor Confirmation field cannot be null, please retry again!");
         if (appointment.getAppointmentDate() == null) throw new ClientAppointmentBookingException("Appointment Date field cannot be null, please retry again!");
 //        if (appointment.getAppointmentDate().isBefore(bookingDate)) throw new ClientAppointmentBookingException("Cannot book to previous date, Please book for future dates");
         if (appointment.getAppointmentSlot() == null) throw new ClientAppointmentBookingException("Appointment Slot field cannot be null, please retry again!");
+
 
 
         // Try using number of slots as variable

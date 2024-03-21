@@ -1,5 +1,8 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.appointment;
 
+import com.doctorappointmentapp.doctorapplicationmicroservice.client.Client;
+import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -10,6 +13,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -35,6 +40,22 @@ public class Appointment {
     private Integer clientID;
     @NotNull
     private Integer doctorID;
+
+//    @JsonIgnore
+//    @ManyToOne
+////    @Builder.Default
+//    private Client client;
+//
+//    @JsonIgnore
+//    @ManyToOne
+////    @Builder.Default
+//    private Doctor doctor;
+
+//    public Appointment(){
+////        this.client=new Client();
+////        this.doctor=new Doctor();
+//    }
+
 }
 
 //Client

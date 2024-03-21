@@ -19,8 +19,8 @@ public class DoctorInformationController {
 
 
     @GetMapping("doctor/{id}")
-    public Doctor getDoctorById(@RequestBody Integer doctorId) throws DoctorFetchingException {
-        return this.doctorService.getDoctorById(doctorId);
+    public Doctor getDoctorById(@PathVariable Integer id) throws DoctorFetchingException {
+        return this.doctorService.getDoctorById(id);
     }
 
     @PostMapping("sign-up/doctor")

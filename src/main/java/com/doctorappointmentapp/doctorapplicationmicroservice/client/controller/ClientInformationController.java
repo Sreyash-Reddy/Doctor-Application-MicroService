@@ -9,18 +9,15 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-//@CrossOrigin("http://localhost:4200")
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"})
 @RestController
 public class ClientInformationController {
     @Autowired
     private ClientService clientService;
 
-
-
     @GetMapping("client/{id}")
-    public Client getClientById(@RequestBody Integer clientId) throws ClientFetchingException{
-        return this.clientService.getClientById(clientId);
+    public Client getClientById(@PathVariable Integer id) throws ClientFetchingException{
+        return this.clientService.getClientById(id);
     }
 
     @PostMapping("sign-up/client")
