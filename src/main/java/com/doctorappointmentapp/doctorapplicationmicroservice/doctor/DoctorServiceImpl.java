@@ -19,6 +19,16 @@ public class DoctorServiceImpl implements DoctorService{
 
     @Autowired
     private AppointmentRepository appointmentRepository;
+
+    @Override
+    public Doctor getDoctorById(Integer doctorId) throws DoctorFetchingException {
+        if(doctorId==null) throw new DoctorFetchingException("Doctor Id cannot be null, please try again");
+        Optional<Doctor> doctorDetails = this.doctorRepository.findById(doctorId);
+        if (doctorDetails.isEmpty()) throw new DoctorFetchingException("Doctor with a given Id does not exist, lease try again");
+        Doctor foundDoctor=doctorDetails.get();
+        return foundDoctor;
+    }
+
     @Override
     public Doctor registerNewDoctorAccountIntoApplication(Doctor doctor) throws DoctorRegistrationException {
         if (doctor == null) throw new DoctorRegistrationException("Null Data Received, Please verify and Register Again");
@@ -26,6 +36,7 @@ public class DoctorServiceImpl implements DoctorService{
         if (doctor.getSpecialization() == null) throw new DoctorRegistrationException("Doctor's Specialization Field Cannot Be Null, Please verify and Register Again");
         if (doctor.getExperience() == null) throw new DoctorRegistrationException("Doctor's Experience Field Cannot Be Null, Please verify and Register Again");
         if (doctor.getExperience() < 0) throw new DoctorRegistrationException("Doctor's Experience Field Cannot Be Negative, Please verify and Register Again");
+        if (doctor.getConsultancyFee() < 0) throw new DoctorRegistrationException("Doctor's Consultancy Fees Cannot Be Negative, Please verify and Register Again");
         if (doctor.getEmail() == null) throw new DoctorRegistrationException("Doctor's Email Field Cannot Be Null, Please verify and Register Again");
         Optional<Doctor> doctorOptional= this.doctorRepository.findByEmail(doctor.getEmail()) ;
         if (doctorOptional.isPresent()){
@@ -34,9 +45,6 @@ public class DoctorServiceImpl implements DoctorService{
             else throw new DoctorRegistrationException("Account With Given Email Has Been Deactivated, Please Contact The Admin");
         }
         if (doctor.getPassword() == null) throw new DoctorRegistrationException("Doctor's Password Field Cannot Be Null, Please verify and Register Again");
-//        doctor.setIsActive(true);
-//        doctor.setPreviousAppointmentList(new ArrayList<>());
-//        doctor.setUpcomingAppointmentList(new ArrayList<>());
         return this.doctorRepository.save(doctor);
     }
 

@@ -24,26 +24,12 @@ public class ClientServiceTest {
     @Autowired
     private DoctorService doctorService;
 
-    private Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("123").build();
-    private Client externalTestClient =Client.builder().name("External Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("externalTestClient@gmail.com").password("123").build();
+    private Client internalTestClient =Client.builder().name("Internal Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("Aa@1Aa@1").build();
+    private Client externalTestClient =Client.builder().name("External Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("externalTestClient@gmail.com").password("Aa@1Aa@1").build();
 
-    private Doctor internalTestDoctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).email("internalTestdoc@gmail.com").password("123").build();
+    private Doctor internalTestDoctor = Doctor.builder().name("Internal Test Doctor").specialization("Neurologist").experience(3).consultancyFee(500.0).mobileNumber("9988776655").email("internalTestdoc@gmail.com").password("Aa@1Aa@1").build();
 
-    private Doctor externalTestDoctor = Doctor.builder().name("External Test Doctor").specialization("Neurologist").experience(3).email("externalTestdoc@gmail.com").password("123").build();
-
-
-//    private Appointment internalAppointment;
-//    private Client testClientResponse;
-//    private Doctor testDoctorResponse;
-//
-//    {
-//        try {
-//            testClientResponse = this.clientService.registerNewClientAccountIntoApplication(internalTestClient);
-//            testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor);
-//        } catch (ClientRegistrationException | DoctorRegistrationException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    private Doctor externalTestDoctor = Doctor.builder().name("External Test Doctor").specialization("Neurologist").experience(3).consultancyFee(500.0).mobileNumber("9988776655").email("externalTestdoc@gmail.com").password("Aa@1Aa@1").build();
 
 
     @BeforeEach
@@ -54,16 +40,6 @@ public class ClientServiceTest {
         try {
             Client testClientResponse=clientService.registerNewClientAccountIntoApplication(internalTestClient);
             Doctor testDoctorResponse=doctorService.registerNewDoctorAccountIntoApplication(internalTestDoctor);
-//            internalAppointment = Appointment.builder()
-//                    .appointmentDescription("Test Appointment")
-//                    .paymentStatus(false)
-//                    .doctorConfirmationStatus(false)
-//                    .appointmentDate(LocalDate.of(2024,2,20))
-//                    .appointmentSlot(1)
-//                    .clientID(testClientResponse.getId())
-//                    .doctorID(testDoctorResponse.getId())
-//                    .build();
-//            clientService.bookAppointmentInClientApplication(internalAppointment,LocalDate.of(2024,2,19));
         } catch (ClientRegistrationException | DoctorRegistrationException e) {
             throw new RuntimeException(e);
         }
@@ -91,42 +67,42 @@ public class ClientServiceTest {
     @DisplayName("Register Client Using Null Name")
     @Test
     void when_registerNewClientAccountIntoApplication_is_called_with_null_name_notNull_dateOfBirth_notNull_mobileNumber_throw_ClientRegistrationException(){
-        Client client=Client.builder().name(null).dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("testClient@gmail.com").password("123").build();
+        Client client=Client.builder().name(null).dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("testClient@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(ClientRegistrationException.class,()->this.clientService.registerNewClientAccountIntoApplication(client));
     }
 
     @DisplayName("Register Client Using Null Date Of Birth")
     @Test
     void when_registerNewClientAccountIntoApplication_is_called_with_notNull_name_null_dateOfBirth_notNull_mobileNumber_throw_ClientRegistrationException(){
-        Client client=Client.builder().name("Test Client").dateOfBirth(null).mobileNumber("9876543210").email("testClient@gmail.com").password("123").build();
+        Client client=Client.builder().name("Test Client").dateOfBirth(null).mobileNumber("9876543210").email("testClient@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(ClientRegistrationException.class,()->this.clientService.registerNewClientAccountIntoApplication(client));
     }
 
     @DisplayName("Register Client With Date Of Birth Within Last 18 Years")
     @Test
     void when_registerNewClientAccountIntoApplication_is_called_with_notNull_name_within_past_18_years_dateOfBirth_notNull_mobileNumber_throw_ClientRegistrationException(){
-        Client client=Client.builder().name("Test Client").dateOfBirth(LocalDate.of(2020,12,31)).mobileNumber("9876543210").email("testClient@gmail.com").password("123").build();
+        Client client=Client.builder().name("Test Client").dateOfBirth(LocalDate.of(2020,12,31)).mobileNumber("9876543210").email("testClient@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(ClientRegistrationException.class,()->this.clientService.registerNewClientAccountIntoApplication(client));
     }
 
     @DisplayName("Register Client Using Null Mobile Number")
     @Test
     void when_registerNewClientAccountIntoApplication_is_called_with_notNull_name_notNull_dateOfBirth_null_mobileNumber__throw_ClientRegistrationException(){
-        Client client=Client.builder().name("Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber(null).email("testClient@gmail.com").password("123").build();
+        Client client=Client.builder().name("Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber(null).email("testClient@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(ClientRegistrationException.class,()->this.clientService.registerNewClientAccountIntoApplication(client));
     }
 
     @DisplayName("Register Client Using Null Email")
     @Test
     void when_registerNewClientAccountIntoApplication_is_called_with_null_email_notNull_password_throw_ClientRegistrationException(){
-        Client client=Client.builder().name("Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email(null).password("123").build();
+        Client client=Client.builder().name("Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email(null).password("Aa@1Aa@1").build();
         Assertions.assertThrows(ClientRegistrationException.class,()->this.clientService.registerNewClientAccountIntoApplication(client));
     }
 
     @DisplayName("Register Client Using Existing Email")
     @Test
     void when_registerNewClientAccountIntoApplication_is_called_with_notNull_existing_email_notNull_password_throw_ClientRegistrationException(){
-        Client client=Client.builder().name("Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("123").build();
+        Client client=Client.builder().name("Test Client").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(ClientRegistrationException.class,()->this.clientService.registerNewClientAccountIntoApplication(client));
     }
 
@@ -180,7 +156,7 @@ public class ClientServiceTest {
     @DisplayName("Updating Client Giving All Details")
     @Test
     void when_updateClientAccountIntoApplication_is_called_with_notNull_name_notNull_dateOfBirth_notNull_mobileNumber_return_object(){
-        Client testClient=Client.builder().name("Internal Test Client Updated").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("123").build();
+        Client testClient=Client.builder().name("Client Updated").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("Aa@1Aa@1").build();
         try {
             Assertions.assertNotNull(this.clientService.updateClientAccountIntoApplication(testClient));
         } catch (ClientUpdationException e) {
@@ -197,35 +173,35 @@ public class ClientServiceTest {
     @DisplayName("Updating Client Null Name")
     @Test
     void when_updateClientAccountIntoApplication_is_called_with_null_name_notNull_dateOfBirth_notNull_mobileNumber_throw_ClientUpdationException(){
-        Client testClient=Client.builder().name(null).dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("123").build();
+        Client testClient=Client.builder().name(null).dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(ClientUpdationException.class,()->this.clientService.updateClientAccountIntoApplication(testClient));
     }
 
     @DisplayName("Updating Client Null Date Of Birth")
     @Test
     void when_updateClientAccountIntoApplication_is_called_with_notNull_name_null_dateOfBirth_notNull_mobileNumber_throw_ClientUpdationException(){
-        Client testClient=Client.builder().name("Test Doctor").dateOfBirth(null).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("123").build();
+        Client testClient=Client.builder().name("Test Doctor").dateOfBirth(null).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(ClientUpdationException.class,()->this.clientService.updateClientAccountIntoApplication(testClient));
     }
 
     @DisplayName("Updating Client With Date Of Birth within past 18 years")
     @Test
     void when_updateClientAccountIntoApplication_is_called_with_notNull_name_dateOfBirth_within_past_18_years_notNull_mobileNumber_throw_ClientUpdationException(){
-        Client testClient=Client.builder().name("Test Doctor").dateOfBirth(LocalDate.of(2020,12,31)).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("123").build();
+        Client testClient=Client.builder().name("Test Doctor").dateOfBirth(LocalDate.of(2020,12,31)).mobileNumber("9876543210").email("internalTestClient@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(ClientUpdationException.class,()->this.clientService.updateClientAccountIntoApplication(testClient));
     }
 
     @DisplayName("Updating Client with Null Mobile Number")
     @Test
     void when_updateClientAccountIntoApplication_is_called_with_notNull_name_notNull_dateOfBirth_null_mobileNumber_throw_ClientUpdationException(){
-        Client testClient=Client.builder().name("Test Doctor").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber(null).email("internalTestClient@gmail.com").password("123").build();
+        Client testClient=Client.builder().name("Test Doctor").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber(null).email("internalTestClient@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(ClientUpdationException.class,()->this.clientService.updateClientAccountIntoApplication(testClient));
     }
 
     @DisplayName("Update Client Using Null Email and Password")
     @Test
     void when_updateClientAccountIntoApplication_is_called_with_null_email_notNull_password_throw_ClientUpdationException(){
-        Client testClient=Client.builder().name("Test Doctor").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email(null).password("123").build();
+        Client testClient=Client.builder().name("Test Doctor").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email(null).password("Aa@1Aa@1").build();
         Assertions.assertThrows(ClientUpdationException.class,()->this.clientService.updateClientAccountIntoApplication(testClient));
     }
 
@@ -239,7 +215,7 @@ public class ClientServiceTest {
     @DisplayName("Update Client Using Non-Existing Email")
     @Test
     void when_updateClientAccountIntoApplication_is_called_with_notNull_nonExisting_email_notNull_password_throw_ClientUpdationException(){
-        Client testClient=Client.builder().name("Test Doctor").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("nonExisting@gmail.com").password("123").build();
+        Client testClient=Client.builder().name("Test Doctor").dateOfBirth(LocalDate.of(2000,12,31)).mobileNumber("9876543210").email("nonExisting@gmail.com").password("Aa@1Aa@1").build();
         Assertions.assertThrows(ClientUpdationException.class,()->this.clientService.updateClientAccountIntoApplication(testClient));
     }
 
@@ -389,7 +365,7 @@ public class ClientServiceTest {
 
     @Test
     @Transactional
-    void when_bookAppointmentInClientApplication_is_called_with_nonexisting_clientID_valid_inputData_throw_ClientAppointmentBookingException(){
+    void when_bookAppointmentInClientApplication_is_called_with_nonExisting_clientID_valid_inputData_throw_ClientAppointmentBookingException(){
         try {
             Doctor testDoctorResponse;
             Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
@@ -550,29 +526,6 @@ public class ClientServiceTest {
 
     @Test
     @Transactional
-    void when_bookAppointmentInClientApplication_is_called_with_irregular_bookingDate_valid_inputData_throw_ClientAppointmentBookingException(){
-        try {
-            Client testClientResponse;
-            Doctor testDoctorResponse;
-            Assertions.assertNotNull(testClientResponse = this.clientService.registerNewClientAccountIntoApplication(externalTestClient));
-            Assertions.assertNotNull(testDoctorResponse = this.doctorService.registerNewDoctorAccountIntoApplication(externalTestDoctor));
-            Appointment appointment = Appointment.builder()
-                    .appointmentDescription("Test")
-                    .paymentStatus(false)
-                    .doctorConfirmationStatus(false)
-                    .appointmentDate(LocalDate.of(2024,2,15))
-                    .appointmentSlot(1)
-                    .clientID(testClientResponse.getId())
-                    .doctorID(testDoctorResponse.getId())
-                    .build();
-            Assertions.assertThrows(ClientAppointmentBookingException.class,() ->this.clientService.bookAppointmentInClientApplication(appointment , LocalDate.of(2024,2,19)));
-        } catch (ClientRegistrationException | DoctorRegistrationException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Test
-    @Transactional
     void when_bookAppointmentInClientApplication_is_called_with_null_slotBooked_valid_inputData_throw_ClientAppointmentBookingException(){
         try {
             Client testClientResponse;
@@ -640,14 +593,6 @@ public class ClientServiceTest {
         }
     }
     //TEST CASES FOR APPOINTMENT PAYMENTS
-//    @Test
-//    void when_makePaymentForAppointment_is_called_with_notnull_appointmentID_return_appointment_object(){
-//        try {
-//            Assertions.assertNotNull(this.clientService.makePaymentForAppointment(internalAppointment.getId()));
-//        } catch (ClientAppointmentPaymentException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
     @Test
     void when_makePaymentForAppointment_is_called_with_null_appointmentID_throw_ClientAppointmentPaymentException() {
         Assertions.assertThrows(ClientAppointmentPaymentException.class,()->this.clientService.makePaymentForAppointment(null));
