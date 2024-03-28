@@ -17,6 +17,7 @@ public interface ClientService {
 
     Client deleteClientAccountFromApplication(String email, String password) throws ClientDeletionException;
 
+    Client getClientById(Integer clientId) throws ClientFetchingException;
     void deleteAllClients();
     List<Doctor> getAvailableDoctors();
     List<Doctor> getAvailableDoctorsByName(String doctorName) throws ClientDoctorSearchingException;
@@ -25,9 +26,7 @@ public interface ClientService {
     Appointment bookAppointmentInClientApplication(Appointment appointment , LocalDate bookingDate) throws ClientAppointmentBookingException;
     Appointment makePaymentForAppointment(Integer appointmentID) throws ClientAppointmentPaymentException;
     List<Appointment> getAllAppointments(Integer clientID) throws ClientAppointmentsFetchingException;
-
     List<Appointment> getAllPreviousAppointments(Integer clientID, LocalDate currentDate) throws ClientAppointmentsFetchingException;
-
     List<Appointment> getAllFutureAppointments(Integer clientID, LocalDate currentDate) throws ClientAppointmentsFetchingException;
 
     void deleteAllAppointments();

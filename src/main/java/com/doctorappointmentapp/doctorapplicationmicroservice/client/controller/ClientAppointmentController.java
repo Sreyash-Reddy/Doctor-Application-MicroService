@@ -8,6 +8,7 @@ import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientL
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.dto.ClientRegistrationDTO;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.*;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"})
 public class ClientAppointmentController {
     @Autowired
     private ClientService clientService;
@@ -39,7 +41,7 @@ public class ClientAppointmentController {
     }
 
     @PostMapping("client/new-appointment")
-    public Appointment bookAppointmentInClientApplication(@RequestBody ClientBookAppointmentDTO clientBookAppointmentDTO) throws ClientAppointmentBookingException {
+    public Appointment bookAppointmentInClientApplication(@Valid @RequestBody ClientBookAppointmentDTO clientBookAppointmentDTO) throws ClientAppointmentBookingException {
         Appointment appointment = Appointment.builder()
                 .appointmentDescription(clientBookAppointmentDTO.getAppointmentDescription())
                 .paymentStatus(false)
@@ -55,7 +57,6 @@ public class ClientAppointmentController {
     public Appointment makePaymentForAppointment(@PathVariable  Integer appointmentID ) throws ClientAppointmentPaymentException{
         return this.clientService.makePaymentForAppointment(appointmentID);
     }
-
 
     @GetMapping("client/all-appointments/clientID={clientID}")
     public List<Appointment> getAllAppointments(@PathVariable Integer clientID) throws ClientAppointmentsFetchingException {

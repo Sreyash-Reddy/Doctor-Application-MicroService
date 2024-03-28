@@ -1,10 +1,14 @@
 package com.doctorappointmentapp.doctorapplicationmicroservice.admin;
 
 
+import com.doctorappointmentapp.doctorapplicationmicroservice.admin.exceptions.AdminLoginException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.admin.exceptions.ClientDeactivationException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.admin.exceptions.DoctorDeactivationException;
+import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.Appointment;
+import com.doctorappointmentapp.doctorapplicationmicroservice.appointment.AppointmentRepository;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.Client;
 import com.doctorappointmentapp.doctorapplicationmicroservice.client.ClientRepository;
+import com.doctorappointmentapp.doctorapplicationmicroservice.client.exceptions.ClientLoginException;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.Doctor;
 import com.doctorappointmentapp.doctorapplicationmicroservice.doctor.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,12 @@ public class AdminServiceImpl implements AdminService{
 
     @Autowired
     DoctorRepository doctorRepository;
+
+    @Autowired
+    AdminRepository adminRepository;
+
+    @Autowired
+    AppointmentRepository appointmentRepository;
 
     @Override
     public List<Doctor> getAllDoctors() {
@@ -46,6 +56,11 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
+    public List<Appointment> getAllAppointments() {
+        return this.appointmentRepository.findAll();
+    }
+
+    @Override
     public Client deactivateClient(Integer clientId) throws ClientDeactivationException {
         if(clientId==null) throw new ClientDeactivationException("Client Id cannot be Null");
         Optional<Client> clientOptional=this.clientRepository.findClientById(clientId);
@@ -57,4 +72,15 @@ public class AdminServiceImpl implements AdminService{
         this.clientRepository.save(foundClient);
         return foundClient;
     }
+
+    @Override
+    public Admin loginAdminAccountIntoApplication(String email, String password) throws AdminLoginException {
+            if (email == null) throw new AdminLoginException("Email field cannot be null! Please retry login!");
+            if (password == null) throw new AdminLoginException("Password field cannot be null! Please retry login!");
+            Optional<Admin> adminDetails = this.adminRepository.findByEmail(email);
+            if (adminDetails.isEmpty()) throw new AdminLoginException("Email account does not exist! Please retry login");
+            if (!adminDetails.get().getPassword().equals(password)) throw new AdminLoginException("Incorrect password! Please retry login!");
+            return adminDetails.get();
+    }
+
 }

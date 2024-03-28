@@ -5,10 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 //import javax.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,20 +28,28 @@ public class Client {
     @Id
     private Integer id;
 
-    @NonNull
+    @NotNull
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z]{5,12}$", message = "Name can only contain letters")
-    @Size(min=5,max=12,message="Length should be between 5-12 characters")
+    @Pattern(regexp = "^[a-zA-Z ]+$", message = "Name can only contain letters")
+    @Size(min=3,max=20,message="Length should be between 3-20 characters")
     private String name;
+
+    @Pattern(regexp = "^[a-zA-Z0-9._+]{1,20}@(gmail\\.com|yahoo\\.com|ford\\.com|outlook\\.com)$", message="Enter a valid email")
     private String email;
+
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\^$*.\\[\\]{}()?\\-\"!@#%&/\\\\,><':;|_~`+=]).{8,16}$", message="Password should contain at least one of each of the following -> lowercase, uppercase, digit, special character")
     private String password;
 
     //Personal Info
     private LocalDate dateOfBirth;
+
+    @Min(18)
+    @Max(120)
     private Integer age;
     //Not including Height and Weight
 
     //Contact Information
+    @Pattern(regexp = "[1-9][0-9]{9}",message = "Enter a 10 digit mobile number")
     private String mobileNumber;
     //Not including Address
 

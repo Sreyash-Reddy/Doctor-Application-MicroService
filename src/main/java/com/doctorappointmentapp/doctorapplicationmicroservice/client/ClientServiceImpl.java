@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
+import javax.print.Doc;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -28,9 +29,6 @@ public class ClientServiceImpl implements ClientService{
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-//    @Value("$numberOfSlots")
-//    private String numberOfSlots;
-
     @Override
     public Client registerNewClientAccountIntoApplication(Client client) throws ClientRegistrationException {
         if (client == null) throw new ClientRegistrationException("Null Data Received, Please verify and Register Again");
@@ -40,7 +38,7 @@ public class ClientServiceImpl implements ClientService{
 
         client.getAge();
 
-        if(client.getAge()<18) throw new ClientRegistrationException("Clients Age Should Be At Least 18 years");
+        if(client.getAge()<18) throw new ClientRegistrationException("Client's Age Should Be At Least 18 years");
         if (client.getEmail() == null) throw new ClientRegistrationException("Client's Email Field Cannot Be Null, Please verify and Register Again");
         Optional<Client> clientOptional= this.clientRepository.findByEmail(client.getEmail()) ;
         if (clientOptional.isPresent()){
@@ -107,6 +105,15 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
+    public Client getClientById(Integer clientId) throws ClientFetchingException {
+        if (clientId == null) throw new ClientFetchingException("Client Id cannot be null, please try again");
+        Optional<Client> clientDetails = this.clientRepository.findById(clientId);
+        if (clientDetails.isEmpty()) throw new ClientFetchingException("Client with given Id does not exist, Please try again");
+        Client foundClient=clientDetails.get();
+        return foundClient;
+    }
+
+    @Override
     public void deleteAllClients() {
         this.clientRepository.deleteAll();
     }
@@ -142,20 +149,30 @@ public class ClientServiceImpl implements ClientService{
     public Appointment bookAppointmentInClientApplication(Appointment appointment , LocalDate bookingDate) throws ClientAppointmentBookingException {
 
         if (appointment.getClientID() == null) throw new ClientAppointmentBookingException("Client ID field cannot be null, Please try again!");
-        if (this.clientRepository.findById(appointment.getClientID()).isEmpty()) throw new ClientAppointmentBookingException("Client ID not found in database, please retry again");
+        Optional<Client> clientOptional=this.clientRepository.findById(appointment.getClientID());
+        if (clientOptional.isEmpty()) throw new ClientAppointmentBookingException("Client ID not found in database, please retry again");
+//        Client foundClient=clientOptional.get();
+       // appointment.setClient(foundClient);
+//
+
         if (appointment.getDoctorID() == null) throw new ClientAppointmentBookingException("Doctor ID field cannot be null, Please try again!");
-        if (this.doctorRepository.findById(appointment.getDoctorID()).isEmpty()) throw new ClientAppointmentBookingException("Doctor ID not found in database, please retry again");
+        Optional<Doctor> doctorOptional=this.doctorRepository.findDoctorById(appointment.getDoctorID());
+        if (doctorOptional.isEmpty()) throw new ClientAppointmentBookingException("Doctor ID not found in database, please retry again");
+//        Doctor foundDoctor=doctorOptional.get();
+        //appointment.setDoctor(foundDoctor);
+
         if (appointment.getAppointmentDescription() == null) throw new ClientAppointmentBookingException("Appoint description cannot be null, please try again!");
         if (appointment.getPaymentStatus() == null) throw new ClientAppointmentBookingException("Payment Status field cannot be null");
         if (appointment.getDoctorConfirmationStatus() == null) throw new ClientAppointmentBookingException("Doctor Confirmation field cannot be null, please retry again!");
         if (appointment.getAppointmentDate() == null) throw new ClientAppointmentBookingException("Appointment Date field cannot be null, please retry again!");
-        if (appointment.getAppointmentDate().isBefore(bookingDate)) throw new ClientAppointmentBookingException("Cannot book to previous date, Please book for future dates");
+//        if (appointment.getAppointmentDate().isBefore(bookingDate)) throw new ClientAppointmentBookingException("Cannot book to previous date, Please book for future dates");
         if (appointment.getAppointmentSlot() == null) throw new ClientAppointmentBookingException("Appointment Slot field cannot be null, please retry again!");
 
 
+
         // Try using number of slots as variable
-        if (appointment.getAppointmentSlot() > 4 && appointment.getAppointmentSlot() <= 0) throw new ClientAppointmentBookingException("Appointment Slots must be in range of 1 to "+4);
-        if (!this.appointmentRepository.findByDoctorIDAndAppointmentDateAndAndAppointmentSlot(appointment.getDoctorID(),appointment.getAppointmentDate(),appointment.getAppointmentSlot()).isEmpty()) throw new ClientAppointmentBookingException("Slot Already booked, please try booking another slot");
+        if (appointment.getAppointmentSlot() > 4 || appointment.getAppointmentSlot() <= 0) throw new ClientAppointmentBookingException("Appointment Slots must be in range of 1 to 4");
+        if (this.appointmentRepository.findByDoctorIDAndAppointmentDateAndAndAppointmentSlot(appointment.getDoctorID(),appointment.getAppointmentDate(),appointment.getAppointmentSlot()).isPresent()) throw new ClientAppointmentBookingException("Slot Already booked, please try booking another slot");
 
         this.clientRepository.getReferenceById(appointment.getClientID()).getAppointmentList().add(appointment);
         this.doctorRepository.getReferenceById(appointment.getDoctorID()).getAppointmentList().add(appointment);
@@ -175,7 +192,6 @@ public class ClientServiceImpl implements ClientService{
         this.appointmentRepository.save(foundAppointment);
         return foundAppointment;
     }
-
     @Override
     public List<Appointment> getAllAppointments(Integer clientID) throws ClientAppointmentsFetchingException {
         if (clientID == null) throw new ClientAppointmentsFetchingException("Client ID field cannot be null, Please retry again!");
@@ -190,7 +206,6 @@ public class ClientServiceImpl implements ClientService{
         if (currentDate == null) throw new ClientAppointmentsFetchingException("Current Date slot cannot be null, Please retry again");
         return this.appointmentRepository.findAppointmentByClientID(clientID).stream().filter(appointment -> appointment.getAppointmentDate().isBefore(currentDate)).collect(Collectors.toList());
     }
-
     @Override
     public List<Appointment> getAllFutureAppointments(Integer clientID, LocalDate currentDate) throws ClientAppointmentsFetchingException {
         if (clientID == null) throw new ClientAppointmentsFetchingException("Client ID field cannot be null, Please retry again!");
